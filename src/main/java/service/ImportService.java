@@ -11,11 +11,14 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 import javax.servlet.ServletContext;
 
 import model.ImportStone;
 
+import org.apache.log4j.Logger;
 import org.jsefa.xml.XmlDeserializer;
 import org.jsefa.xml.XmlIOFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +33,8 @@ import dao.ImportStoneDao;
 @Service
 public class ImportService {
 	
-	
+
+	private static Logger log = Logger.getLogger(ImportService.class);
 	@Autowired
 	private ImportStoneDao importStoneDao;
 	@Autowired 
@@ -48,22 +52,24 @@ public class ImportService {
 		 InputStream inputStream = null;
 		try {
 			ServletContextResource resource = new ServletContextResource(servletContext, 
-				    "/WEB-INF/resource/hackathon2015-daten-stadtmuseumberlin.csv");
+				    "/WEB-INF/content/outpput.xml");
 			
             //inputStream = servletContext.getResourceAsStream("/WEB-INF/resource/hackathon2015-daten-stadtmuseumberlin.csv");
-            inputStream=resource.getInputStream();
+            File file = resource.getFile();
+			inputStream=resource.getInputStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
 			StringWriter writer = new StringWriter();
-            
-            
             /*
 			bytes = Files.readAllBytes(file.toPath());
 			writer.write( new String(bytes,"UTF-8"));*/
-			writer.write(bufferedReader.readLine());
+			//writer.write(bufferedReader.readLine());
+			writer.write(new Scanner(file).useDelimiter("\\Z").next());
+			
 			XmlDeserializer deserializer = XmlIOFactory.createFactory(ImportStone.class).createDeserializer();
 			StringReader reader = new StringReader(writer.toString());
 			deserializer.open(reader);
+
 			while (deserializer.hasNext()) {
 			    ImportStone p = deserializer.next();
 			    importStoneDao.persist(p);
