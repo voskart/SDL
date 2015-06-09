@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="SDL:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="SDL.war">
+      <element id="artifact" artifact-name="SDL:war exploded" />
+    </root>
+  </artifact>
+</component>
