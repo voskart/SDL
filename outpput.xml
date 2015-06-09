@@ -1,33 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <stones>
   <stone>
-    <InvNr1>Inv. Nr.</InvNr1>
-    <MusId>Stadtmuseum ID</MusId>
-    <Link>Link</Link>
-    <InvNr2>Inv.-Nr.</InvNr2>
-    <Bild>Bild</Bild>
-    <Titel>Titel</Titel>
-    <Masze>Maße</Masze>
-    <Hoehe>Höhe</Hoehe>
-    <Breite>Breite</Breite>
-    <Tiefe>Tiefe</Tiefe>
-    <Unit>Unit</Unit>
-    <Material>Material</Material>
-    <MaterialId>Material Wikidata ID</MaterialId>
-    <Datierung>Datierung in mya</Datierung>
-    <Erdzeitalter>Erdzeitalter</Erdzeitalter>
-    <ErdzeitalterId>Erdzeitalter Wikidata ID</ErdzeitalterId>
-    <Herkunft>Herkunft</Herkunft>
-    <HerkunftCoord>Herkunft Koordinate</HerkunftCoord>
-    <HerkunftId>Herkunft Wikidata ID</HerkunftId>
-    <HerkunftGeoId>Herkunft Geoname ID</HerkunftGeoId>
-    <Fundort>Fundort</Fundort>
-    <FundortCoord>Fundort Koordinate</FundortCoord>
-    <FundortId>Fundort Wikidata ID</FundortId>
-    <FundortGeoId>Fundort Geoname ID</FundortGeoId>
-    <Kommentar>Kommentar</Kommentar>
-  </stone>
-  <stone>
     <InvNr1>G 99-13</InvNr1>
     <MusId>172597</MusId>
     <Link>https://sammlung-online.stadtmuseum.de/index.html?objektid=172597</Link>
