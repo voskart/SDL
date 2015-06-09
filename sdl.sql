@@ -29,6 +29,28 @@ CREATE TABLE `importstones` (
   `InvNr` varchar(45) DEFAULT NULL,
   `MusId` int(11) DEFAULT NULL,
   `Link` varchar(100) DEFAULT NULL,
+  `InvNr2` varchar(100) DEFAULT NULL,
+  `Test` varchar(100) DEFAULT NULL,
+  `Titel` varchar(100) DEFAULT NULL,
+  `Masze` varchar(100) DEFAULT NULL,
+  `Hoehe` varchar(100) DEFAULT NULL,
+  `Breite` varchar(100) DEFAULT NULL,
+  `Tiefe` varchar(100) DEFAULT NULL,
+  `Unit` varchar(100) DEFAULT NULL,
+  `Material` varchar(100) DEFAULT NULL,
+  `MaterialId` varchar(100) DEFAULT NULL,
+  `Datierung` varchar(100) DEFAULT NULL,
+  `Erdzeitalter` varchar(100) DEFAULT NULL,
+  `ErdzeitalterId` varchar(100) DEFAULT NULL,
+  `Herkunft` varchar(100) DEFAULT NULL,
+  `HerkunftCoord` varchar(100) DEFAULT NULL,
+  `HerkunftId` varchar(100) DEFAULT NULL,
+  `HerkunftGeoId` varchar(100) DEFAULT NULL,
+  `Fundort` varchar(100) DEFAULT NULL,
+  `FundortCoord` varchar(100) DEFAULT NULL,
+  `FundortId` varchar(100) DEFAULT NULL,
+  `FundortGeoId` varchar(100) DEFAULT NULL,
+  `Kommentar` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -51,4 +73,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-06-09 18:55:36
+-- Dump completed on 2015-06-09 22:18:36

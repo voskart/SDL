@@ -15,4 +15,13 @@ public class ImportStoneDao extends GenericDao<ImportStone, Long>{
 	public ImportStoneDao() {
 		super.setInstanceClass(ImportStone.class);
 	}
+	
+	public List<ImportStone> getStonebyMaterial(String str){
+		Query query = super.getEntityManager().createQuery("SELECT r FROM ImportStoe r WHERE r.Material LIKE :Id")
+				  .setParameter("Id", str);
+		if (query.getResultList().size()==0){
+			return null;
+		}
+		return query.getResultList();
+	}
 }
