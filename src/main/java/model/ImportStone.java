@@ -62,7 +62,7 @@ public class ImportStone implements org.codehaus.jackson.map.JsonSerializableWit
     @CsvField(pos = 7)
     @XmlElement(name = "Masze", pos = 7)
     @Column(name = "Masze")
-    private String Maﬂe;
+    private String Masze;
 
     @CsvField(pos = 8)
     @XmlElement(name = "Hoehe", pos = 8)
@@ -212,12 +212,12 @@ public class ImportStone implements org.codehaus.jackson.map.JsonSerializableWit
 		Titel = titel;
 	}
 
-	public String getMaﬂe() {
-		return Maﬂe;
+	public String getMasze() {
+		return Masze;
 	}
 
-	public void setMaﬂe(String maﬂe) {
-		Maﬂe = maﬂe;
+	public void setMasze(String masze) {
+		Masze = masze;
 	}
 
 	public String getHoehe() {

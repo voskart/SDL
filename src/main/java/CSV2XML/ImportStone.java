@@ -35,7 +35,7 @@ public class ImportStone {
 
     @CsvField(pos = 7)
     @XmlElement(name = "Masze", pos = 7)
-    String Maﬂe;
+    String Masze;
 
     @CsvField(pos = 8)
     @XmlElement(name = "Hoehe", pos = 8)
@@ -118,7 +118,7 @@ public class ImportStone {
     	stone.InvNr2=list[3];
     	stone.Bild=list[4];
     	stone.Titel=list[5];
-    	stone.Maﬂe=list[6];
+    	stone.Masze=list[6];
     	stone.Hoehe=list[7];
     	stone.Breite=list[8];
     	stone.Tiefe=list[9];
