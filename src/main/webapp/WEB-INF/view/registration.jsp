@@ -7,10 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <title>Registration Page</title>
-</head>
-<body>
-
+<h1>Please register to Steine der Leidenschaft</h1>
+<form action="registration" method="POST">
+    Username: <input type ="text" name="username" /> <br />
+    Password: <input type ="password" name="password" /> <br />
+    <input type="submit" value="Login" />
+</form>
 </body>
 </html>

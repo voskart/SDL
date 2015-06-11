@@ -51,9 +51,11 @@ public class LoginController {
 
         // Hash the password, for dem safety-reasons
         String passwordHash = encryptPassword(password);
+        // This user-object can be used for further actions
+        // TODO: Return the user's uuid for further actions?
         User tmp_user = new User(username, passwordHash);
 
-        logger.info("username: "+ username+", password: " + passwordHash);
+        logger.info("username: " + username + ", password: " + passwordHash);
 
         boolean tmp_bool = validateUserInXML(tmp_user);
 
@@ -74,7 +76,7 @@ public class LoginController {
         return "login";
     }
 
-    private static String encryptPassword(String password)
+    protected static String encryptPassword(String password)
     {
         String sha1 = "";
         try
@@ -111,7 +113,7 @@ public class LoginController {
 
         String search_user = user.getUsername();
         String search_pw = user.getPassword();
-        Map<String, String> userList = new HashMap<String, String>();
+        Map<String, ArrayList<String>> userList = new HashMap<String, ArrayList<String>>();
         File userXML = null;
         ServletContextResource servletContextResource = null;
 
@@ -145,8 +147,9 @@ public class LoginController {
                 Node firstPersonNode = listOfUsers.item(s);
                 if(firstPersonNode.getNodeType() == Node.ELEMENT_NODE){
 
-                    String tmp_username;
-                    String tmp_password;
+                    String tmp_username = "";
+                    String tmp_password = "";
+                    String tmp_uuid = "";
 
                     Element firstPersonElement = (Element)firstPersonNode;
 
@@ -159,10 +162,16 @@ public class LoginController {
                     NodeList passwordList = firstPersonElement.getElementsByTagName("password");
                     Element passwordElement = (Element)passwordList.item(0);
 
+                    NodeList uuidList = firstPersonElement.getElementsByTagName("uuid");
+                    Element uuidElement = (Element)passwordList.item(0);
+
                     NodeList PWList = passwordElement.getChildNodes();
                     tmp_password = ((Node)PWList.item(0)).getNodeValue().trim();
 
-                    userList.put(tmp_username, tmp_password);
+                    ArrayList <String> tmp_list = new ArrayList<String>();
+                    tmp_list.add(tmp_password);
+                    tmp_list.add(tmp_uuid);
+                    userList.put(tmp_username, tmp_list);
                 }
             }
 
@@ -180,8 +189,10 @@ public class LoginController {
         }
 
         try {
-            String password = userList.get(search_user);
-            if (password.equals(search_pw)){
+            // Get the ArrayList of values, password and uuid
+            // UUID index 1
+            ArrayList<String> values = userList.get(search_user);
+            if (values.get(0).equals(search_pw)){
                 return true;
             }
         }catch (Exception e){
