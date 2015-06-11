@@ -1,14 +1,16 @@
 package controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +18,8 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import java.io.File;
+
+import org.springframework.web.context.support.ServletContextResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.*;
 
@@ -31,6 +35,8 @@ import org.xml.sax.SAXParseException;
 @RequestMapping("/login")
 public class LoginController {
 
+    @Autowired
+    private ServletContext servletContext;
     private static final Logger logger = Logger.getLogger(String.valueOf(LoginController.class));
 
     // Fetch the user-information from the model
@@ -49,7 +55,6 @@ public class LoginController {
 
         logger.info("username: "+ username+", password: " + passwordHash);
 
-        // TODO: Actual validation of Login
         boolean tmp_bool = validateUserInXML(tmp_user);
 
         // Check if the user is in the XML file
@@ -65,7 +70,7 @@ public class LoginController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String showForm(){
+    public static String showForm(){
         return "login";
     }
 
@@ -102,15 +107,31 @@ public class LoginController {
         return result;
     }
 
-    private static boolean validateUserInXML(User user) {
+    private boolean validateUserInXML(User user) {
+
         String search_user = user.getUsername();
         String search_pw = user.getPassword();
         Map<String, String> userList = new HashMap<String, String>();
+        File userXML = null;
+        ServletContextResource servletContextResource = null;
+
         try {
 
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse (new File("/com/springapp/mvc/users.xml"));
+
+            InputStream inputStream = null;
+            try {
+                servletContextResource = new ServletContextResource(servletContext,"/WEB-INF/content/users.xml");
+
+                userXML = servletContextResource.getFile();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            Document doc = docBuilder.parse(userXML);
 
             // normalize text representation
             doc.getDocumentElement ().normalize ();
