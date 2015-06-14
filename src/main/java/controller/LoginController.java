@@ -138,43 +138,44 @@ public class LoginController {
             // normalize text representation
             doc.getDocumentElement ().normalize ();
 
+
             NodeList listOfUsers = doc.getElementsByTagName("user");
             int totalUsers = listOfUsers.getLength();
             logger.info("Total no of users : " + totalUsers);
 
-            for(int s=0; s<listOfUsers.getLength() ; s++){
+            for (int temp = 0; temp < listOfUsers.getLength(); temp++) {
 
-                Node firstPersonNode = listOfUsers.item(s);
-                if(firstPersonNode.getNodeType() == Node.ELEMENT_NODE){
+                String tmp_username = "";
+                String tmp_password = "";
+                String tmp_uuid = "";
 
-                    String tmp_username = "";
-                    String tmp_password = "";
-                    String tmp_uuid = "";
+                Node nNode = listOfUsers.item(temp);
 
-                    Element firstPersonElement = (Element)firstPersonNode;
+                logger.info("\nCurrent Element :" + nNode.getNodeName());
 
-                    NodeList usernameList = firstPersonElement.getElementsByTagName("username");
-                    Element firstNameElement = (Element)usernameList.item(0);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
-                    NodeList UNList = firstNameElement.getChildNodes();
-                    tmp_username = ((Node)UNList.item(0)).getNodeValue().trim();
+                    Element eElement = (Element) nNode;
 
-                    NodeList passwordList = firstPersonElement.getElementsByTagName("password");
-                    Element passwordElement = (Element)passwordList.item(0);
+                    tmp_username = eElement.getElementsByTagName("username").item(0).getTextContent();
+                    tmp_password = eElement.getElementsByTagName("password").item(0).getTextContent();
+                    tmp_uuid = eElement.getElementsByTagName("uuid").item(0).getTextContent();
 
-                    NodeList uuidList = firstPersonElement.getElementsByTagName("uuid");
-                    Element uuidElement = (Element)passwordList.item(0);
-
-                    NodeList PWList = passwordElement.getChildNodes();
-                    tmp_password = ((Node)PWList.item(0)).getNodeValue().trim();
-
-                    ArrayList <String> tmp_list = new ArrayList<String>();
+                    // Create a temporary list for the data (password-hash and uuid)
+                    ArrayList<String> tmp_list = new ArrayList<String>();
                     tmp_list.add(tmp_password);
                     tmp_list.add(tmp_uuid);
+                    // Add the username (key) together with the data (value) to the HashMap
                     userList.put(tmp_username, tmp_list);
+                    // HERE (Sinur & Kevin): Possible creation of the user-object
+                    // User user = new User(un, pw, uuid) & further work, database, new stone etc.
+                    // Logger
+                    logger.info("Username : " + eElement.getElementsByTagName("username").item(0).getTextContent());
+                    logger.info("Password : " + eElement.getElementsByTagName("password").item(0).getTextContent());
+                    logger.info("UUID : " + eElement.getElementsByTagName("uuid").item(0).getTextContent());
+
                 }
             }
-
         }catch (SAXParseException e) {
             logger.info("** Parsing error" + ", line "
                     + e.getLineNumber () + ", uri " + e.getSystemId ());

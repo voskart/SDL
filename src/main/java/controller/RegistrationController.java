@@ -70,7 +70,6 @@ public class RegistrationController {
             try {
                 servletContextResource = new ServletContextResource(servletContext,"/WEB-INF/content/users.xml");
                 userXML = servletContextResource.getFile();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
