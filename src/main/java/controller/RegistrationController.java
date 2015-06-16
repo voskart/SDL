@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
@@ -33,7 +32,6 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
-
 
     @Autowired
     private ServletContext servletContext;
@@ -68,9 +66,9 @@ public class RegistrationController {
 
             InputStream inputStream = null;
             try {
-                servletContextResource = new ServletContextResource(servletContext,"/WEB-INF/content/users.xml");
-                userXML = servletContextResource.getFile();
-            } catch (IOException e) {
+                ServletContextResource resource = new ServletContextResource(servletContext,"/WEB-INF/content/users.xml");
+                userXML = resource.getFile();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -109,7 +107,7 @@ public class RegistrationController {
             StreamResult result = new StreamResult(userXML);
             transformer.transform(source, result);
 
-        } catch (ParserConfigurationException e) {
+        }catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (TransformerException e) {
             e.printStackTrace();

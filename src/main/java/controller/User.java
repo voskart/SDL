@@ -3,7 +3,7 @@ package controller;
 /**
  * Created by voskart on 11.06.15.
  */
-public class User {
+public class User{
 
     private String username;
     private String password;

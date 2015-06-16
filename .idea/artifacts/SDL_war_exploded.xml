@@ -106,6 +106,7 @@
         </element>
       </element>
       <element id="javaee-facet-resources" facet="SDL/web/Web" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
     </root>
   </artifact>
 </component>
