@@ -42,15 +42,33 @@ public class DatabaseService {
 
 	    new Set("CREATEFILTER", "*.xml").execute(context);
 
+
+	    new CreateDB("Database").execute(context);
+	    
+	    
+	    
+	    
 	    System.out.println("\n* Create a collection.");
 		ServletContextResource resource = new ServletContextResource(servletContext, 
 			    "/WEB-INF/content/outpput.xml");
-		
 		InputStream inputStream=resource.getInputStream();
-		CreateDB createDb = new CreateDB("outpput");
-		createDb.setInput(inputStream);
-		createDb.execute(context);
-	    new DropDB("Collection").execute(context);
+	    Add addx =new Add("outpput.xml");
+	    addx.setInput(inputStream);
+	    addx.execute(context);
+		
+		
+
+		ServletContextResource resourcex = new ServletContextResource(servletContext, 
+			    "/WEB-INF/content/users.xml");
+		
+		InputStream inputStreamx=resourcex.getInputStream();
+	    Add add =new Add("users.xml");
+	    add.setInput(inputStreamx);
+	    add.execute(context);
+
+	    new Optimize().execute(context);
+		
+		
 
 	    // Show information on the currently opened database
 	    System.out.println("\n* Show database information:");
@@ -63,16 +81,17 @@ public class DatabaseService {
 	            "where ends-with($file-path, 'outpput.xml')" +
 	            "return concat($file-path, ' has ', count($doc//*), ' elements')"
 	        ).execute(context));
+	    
+	    System.out.println(new XQuery(
+	            "for $doc in collection()" +
+	            "let $file-path := base-uri($doc)" +
+	            "where ends-with($file-path, 'users.xml')" +
+	            "return concat($file-path, ' has ', count($doc//*), ' elements')"
+	        ).execute(context));
 
 	}
 
 	public void stopDB() throws IOException {
-	    System.out.println(new XQuery(
-	            "for $doc in collection()" +
-	            "let $file-path := base-uri($doc)" +
-	            "where ends-with($file-path, 'outpput.xml')" +
-	            "return concat($file-path, ' has ', count($doc//*), ' elements')"
-	        ).execute(context));
 	    // Create database context
 	    context = new Context();	    // Drop the database
 	    System.out.println("\n* Drop the collection.");
