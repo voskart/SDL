@@ -86,7 +86,7 @@ public class DatabaseService {
 	            "for $doc in collection()" +
 	            "let $file-path := base-uri($doc)" +
 	            "where ends-with($file-path, 'users.xml')" +
-	            "return concat($file-path, ' has ', count($doc//*), ' elements')"
+	            "return //users/user/username"
 	        ).execute(context));
 
 	}
