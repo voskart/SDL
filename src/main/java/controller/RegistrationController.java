@@ -97,7 +97,7 @@ public class RegistrationController {
                 newUser.appendChild(password);
                 // Create new node for the uuid of the registered user
                 Element uuid = document.createElement("uuid");
-                uuid.appendChild(document.createTextNode(user.getUuid().toString()));
+                uuid.appendChild(document.createTextNode(user.getID().toString()));
                 newUser.appendChild(uuid);
 
                 root.appendChild(newUser);
