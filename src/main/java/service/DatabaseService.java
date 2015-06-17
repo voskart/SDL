@@ -8,8 +8,16 @@ import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.basex.BaseXServer;
+import org.basex.core.BaseXException;
+import org.basex.core.Context;
+import org.basex.core.cmd.Add;
 import org.basex.core.cmd.CreateDB;
+import org.basex.core.cmd.Delete;
 import org.basex.core.cmd.DropDB;
+import org.basex.core.cmd.InfoDB;
+import org.basex.core.cmd.Optimize;
+import org.basex.core.cmd.Set;
+import org.basex.core.cmd.XQuery;
 import org.basex.server.ClientQuery;
 import org.basex.server.ClientSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,57 +28,56 @@ import controller.RegistrationController;
 
 @Service
 public class DatabaseService {
-	BaseXServer server;
+	Context context;
     private static final Logger log = Logger.getLogger(String.valueOf(DatabaseService.class));
 	@Autowired 
 	private ServletContext servletContext;
 
 	public void startDB() throws Exception {
-		log.info("=== ServerCommands ===");
 
-		// Start server on default port 1984
-		server = new BaseXServer();
+	    // Create database context
+	    context = new Context();
 
-		// Create a client session with host name, port, user name and password
-		log.info("\n* Create a client session.");
+	    System.out.println("=== CreateCollection ===");
 
-		ClientSession session = new ClientSession("localhost", 1984, "admin",
-				"admin");
+	    new Set("CREATEFILTER", "*.xml").execute(context);
 
-		// Create a database
-		log.info("\n* Create a database.");
+	    System.out.println("\n* Create a collection.");
 		ServletContextResource resource = new ServletContextResource(servletContext, 
 			    "/WEB-INF/content/outpput.xml");
 		
-        File file = resource.getFile();
 		InputStream inputStream=resource.getInputStream();
-		CreateDB createDb = new CreateDB("input");
+		CreateDB createDb = new CreateDB("outpput");
 		createDb.setInput(inputStream);
-		session.execute(createDb);
-		
+		createDb.execute(context);
+	    new DropDB("Collection").execute(context);
 
-		// Faster version: specify an output stream and run a query
-		log.info("\n* Run a query (faster):");
-		ClientQuery query = session.query("//stones/stone/Material");
-		log.info(query.execute());
+	    // Show information on the currently opened database
+	    System.out.println("\n* Show database information:");
 
-		session.close();
+	    System.out.println(new InfoDB().execute(context));
+
+	    System.out.println(new XQuery(
+	            "for $doc in collection()" +
+	            "let $file-path := base-uri($doc)" +
+	            "where ends-with($file-path, 'outpput.xml')" +
+	            "return concat($file-path, ' has ', count($doc//*), ' elements')"
+	        ).execute(context));
 
 	}
 
 	public void stopDB() throws IOException {
 
-		ClientSession session = new ClientSession("localhost", 1984, "admin",
-				"admin");
-		// Drop the database
-		log.info("\n* Close and drop the database.");
+	    // Create database context
+	    context = new Context();	    // Drop the database
+	    System.out.println("\n* Drop the collection.");
 
-		session.execute(new DropDB("input"));
+	    new DropDB("Collection").execute(context);
 
-		// Stop the server
-		log.info("\n* Stop the server.");
-
-		server.stop();
+	    // Close the database context
+	    context.close();
 	}
+
+	
 
 }
