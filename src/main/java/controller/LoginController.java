@@ -1,6 +1,9 @@
 package controller;
 
 import com.ettrema.http.fs.ClassPathResourceFactory;
+
+import model.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -22,15 +26,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Logger;
-
 import java.io.File;
 
 import org.springframework.web.context.support.ServletContextResource;
-import org.w3c.dom.Document;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
