@@ -75,19 +75,6 @@ public class DatabaseService {
 
 	    System.out.println(new InfoDB().execute(context));
 
-	    System.out.println(new XQuery(
-	            "for $doc in collection()" +
-	            "let $file-path := base-uri($doc)" +
-	            "where ends-with($file-path, 'outpput.xml')" +
-	            "return concat($file-path, ' has ', count($doc//*), ' elements')"
-	        ).execute(context));
-	    
-	    System.out.println(new XQuery(
-	            "for $doc in collection()" +
-	            "let $file-path := base-uri($doc)" +
-	            "where ends-with($file-path, 'users.xml')" +
-	            "return //users/user/username"
-	        ).execute(context));
 
 	}
 
