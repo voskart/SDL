@@ -67,7 +67,12 @@ public class DatabaseService {
 	}
 
 	public void stopDB() throws IOException {
-
+	    System.out.println(new XQuery(
+	            "for $doc in collection()" +
+	            "let $file-path := base-uri($doc)" +
+	            "where ends-with($file-path, 'outpput.xml')" +
+	            "return concat($file-path, ' has ', count($doc//*), ' elements')"
+	        ).execute(context));
 	    // Create database context
 	    context = new Context();	    // Drop the database
 	    System.out.println("\n* Drop the collection.");
