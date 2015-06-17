@@ -1,9 +1,11 @@
 package model;
 
+import Interfaces.IRateable;
+
 /**
  * Created by voskart on 11.06.15.
  */
-public class User{
+public class User implements IRateable {
 
     private String username;
     private String password;
@@ -28,8 +30,6 @@ public class User{
         return this.username;
     }
 
-    public String getUuid() { return this.uuid; }
-
     public void setUsername(String username){
         this.username = username;
     }
@@ -40,5 +40,10 @@ public class User{
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    @Override
+    public String getID() {
+        return this.uuid;
     }
 }
