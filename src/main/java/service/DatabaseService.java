@@ -102,6 +102,14 @@ public class DatabaseService {
 	    context.close();
 	}
 
-	
+	public String getAllUsernames() throws BaseXException{
+	    
+	    return (new XQuery(
+	            "for $doc in collection()" +
+	            "let $file-path := base-uri($doc)" +
+	            "where ends-with($file-path, 'users.xml')" +
+	            "return //users/user/username"
+	        ).execute(context));
+	}
 
 }
