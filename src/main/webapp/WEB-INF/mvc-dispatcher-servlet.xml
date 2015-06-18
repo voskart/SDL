@@ -38,29 +38,4 @@
 	</beans:bean>
 	
 
-	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close" lazy-init="default">
-		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<beans:property name="url" value="jdbc:mysql://localhost:3306/sdl" />
-		<beans:property name="username" value="root" />
-		<beans:property name="password" value="root" />
-	</beans:bean>
-
-	<beans:bean id="jpaVendorAdapter"
-		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-	</beans:bean>
-
-	<beans:bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<beans:property name="dataSource" ref="dataSource" />
-		<beans:property name="persistenceUnitName" value="sdl-persist" />
-		<beans:property name="packagesToScan" value="model" />
-		<beans:property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
-	</beans:bean>
-
-	<beans:bean id="transactionManager"
-		class="org.springframework.orm.jpa.JpaTransactionManager">
-		<beans:property name="entityManagerFactory" ref="entityManagerFactory" />
-	</beans:bean>
-	
 	</beans:beans>
