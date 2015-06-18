@@ -52,18 +52,18 @@ public class DatabaseService {
 		ServletContextResource resource = new ServletContextResource(servletContext, 
 			    "/WEB-INF/content/outpput.xml");
 		InputStream inputStream = resource.getInputStream();
-	    Add addx =new Add("outpput.xml");
+	    Add addx = new Add("outpput.xml");
 	    addx.setInput(inputStream);
 	    addx.execute(context);
 		
 		
 
-		ServletContextResource resourcex = new ServletContextResource(servletContext, 
+		ServletContextResource userResource = new ServletContextResource(servletContext,
 			    "/WEB-INF/content/users.xml");
 		
-		InputStream inputStreamx = resourcex.getInputStream();
+		InputStream inputStreamUsers = userResource.getInputStream();
 	    Add add = new Add("users.xml");
-	    add.setInput(inputStreamx);
+	    add.setInput(inputStreamUsers);
 	    add.execute(context);
 
 	    new Optimize().execute(context);
@@ -89,9 +89,9 @@ public class DatabaseService {
 	    context.close();
 	}
 
-	public void getUserPasswordHash(String username) throws BaseXException{
+	public String getUserPasswordHash(String username) throws BaseXException{
 	    
-	    LOGGER.info(new XQuery(
+	    return(new XQuery(
 	            "for $doc in collection()" +
 	            "let $file-path := base-uri($doc)" +
 	            "where ends-with($file-path, 'users.xml')" +
