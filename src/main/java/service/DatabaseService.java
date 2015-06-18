@@ -51,7 +51,7 @@ public class DatabaseService {
 	    System.out.println("\n* Create a collection.");
 		ServletContextResource resource = new ServletContextResource(servletContext, 
 			    "/WEB-INF/content/outpput.xml");
-		InputStream inputStream=resource.getInputStream();
+		InputStream inputStream = resource.getInputStream();
 	    Add addx =new Add("outpput.xml");
 	    addx.setInput(inputStream);
 	    addx.execute(context);
@@ -61,8 +61,8 @@ public class DatabaseService {
 		ServletContextResource resourcex = new ServletContextResource(servletContext, 
 			    "/WEB-INF/content/users.xml");
 		
-		InputStream inputStreamx=resourcex.getInputStream();
-	    Add add =new Add("users.xml");
+		InputStream inputStreamx = resourcex.getInputStream();
+	    Add add = new Add("users.xml");
 	    add.setInput(inputStreamx);
 	    add.execute(context);
 
