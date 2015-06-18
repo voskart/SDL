@@ -29,7 +29,7 @@ import controller.RegistrationController;
 @Service
 public class DatabaseService {
 	Context context;
-    private static final Logger log = Logger.getLogger(String.valueOf(DatabaseService.class));
+    private static final Logger LOGGER = Logger.getLogger(String.valueOf(DatabaseService.class));
 	@Autowired 
 	private ServletContext servletContext;
 
@@ -38,17 +38,17 @@ public class DatabaseService {
 	    // Create database context
 	    context = new Context();
 
-	    System.out.println("=== CreateCollection ===");
+	    LOGGER.info("=== CreateCollection ===");
 
 	    new Set("CREATEFILTER", "*.xml").execute(context);
 
 
 	    new CreateDB("Database").execute(context);
-	    
-	    
-	    
-	    
-	    System.out.println("\n* Create a collection.");
+
+
+
+
+        LOGGER.info("\n* Create a collection.");
 		ServletContextResource resource = new ServletContextResource(servletContext, 
 			    "/WEB-INF/content/outpput.xml");
 		InputStream inputStream = resource.getInputStream();
@@ -71,9 +71,9 @@ public class DatabaseService {
 		
 
 	    // Show information on the currently opened database
-	    System.out.println("\n* Show database information:");
+        LOGGER.info("\n* Show database information:");
 
-	    System.out.println(new InfoDB().execute(context));
+        LOGGER.info(new InfoDB().execute(context));
 
 
 	}
@@ -89,13 +89,13 @@ public class DatabaseService {
 	    context.close();
 	}
 
-	public String getAllUsernames() throws BaseXException{
+	public void getUserPasswordHash(String username) throws BaseXException{
 	    
-	    return (new XQuery(
+	    LOGGER.info(new XQuery(
 	            "for $doc in collection()" +
 	            "let $file-path := base-uri($doc)" +
 	            "where ends-with($file-path, 'users.xml')" +
-	            "return //users/user/username"
+                "return //users/user/username"
 	        ).execute(context));
 	}
 

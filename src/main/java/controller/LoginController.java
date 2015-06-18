@@ -4,6 +4,7 @@ import com.ettrema.http.fs.ClassPathResourceFactory;
 
 import model.User;
 
+import org.basex.core.BaseXException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -36,6 +37,7 @@ import javax.xml.parsers.DocumentBuilder;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import service.DatabaseService;
 
 /**
  * Created by voskart on 11.06.15.
@@ -66,7 +68,12 @@ public class LoginController {
 
         logger.info("username: " + username + ", password: " + passwordHash);
 
-        boolean tmp_bool = validateUserInXML(tmp_user);
+        boolean tmp_bool = false;
+        try {
+            tmp_bool = validateUserInXMLDB(tmp_user);
+        } catch (BaseXException e) {
+            e.printStackTrace();
+        }
 
         // Check if the user is in the XML file
         if (tmp_bool){
@@ -118,90 +125,15 @@ public class LoginController {
         return result;
     }
 
-    private boolean validateUserInXML(User user) {
+    private boolean validateUserInXMLDB(User user) throws BaseXException {
 
-        String search_user = user.getUsername();
-        String search_pw = user.getPassword();
-        Map<String, ArrayList<String>> userList = new HashMap<String, ArrayList<String>>();
-        File userXML = null;
-        ServletContextResource servletContextResource = null;
+        DatabaseService dbservice = new DatabaseService();
+        dbservice.getUserPasswordHash(user.getUsername());
+        // logger.info(user.getPassword() + " " + password);
 
         try {
-
-            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-
-            InputStream inputStream = null;
-            try {
-                servletContextResource = new ServletContextResource(servletContext,"/WEB-INF/content/users.xml");
-                userXML = servletContextResource.getFile();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-            Document doc = docBuilder.parse(userXML);
-
-            // normalize text representation
-            doc.getDocumentElement ().normalize ();
-
-
-            NodeList listOfUsers = doc.getElementsByTagName("user");
-            int totalUsers = listOfUsers.getLength();
-            logger.info("Total no of users : " + totalUsers);
-
-            for (int temp = 0; temp < listOfUsers.getLength(); temp++) {
-
-                String tmp_username = "";
-                String tmp_password = "";
-                String tmp_uuid = "";
-
-                Node nNode = listOfUsers.item(temp);
-
-                logger.info("\nCurrent Element :" + nNode.getNodeName());
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-
-                    Element eElement = (Element) nNode;
-
-                    tmp_username = eElement.getElementsByTagName("username").item(0).getTextContent();
-                    tmp_password = eElement.getElementsByTagName("password").item(0).getTextContent();
-                    tmp_uuid = eElement.getElementsByTagName("uuid").item(0).getTextContent();
-
-                    // Create a temporary list for the data (password-hash and uuid)
-                    ArrayList<String> tmp_list = new ArrayList<String>();
-                    tmp_list.add(tmp_password);
-                    tmp_list.add(tmp_uuid);
-                    // Add the username (key) together with the data (value) to the HashMap
-                    userList.put(tmp_username, tmp_list);
-                    // HERE (Sinur & Kevin): Possible creation of the user-object
-                    // User user = new User(un, pw, uuid) & further work, database, new stone etc.
-                    // Logger
-                    logger.info("Username : " + eElement.getElementsByTagName("username").item(0).getTextContent());
-                    logger.info("Password : " + eElement.getElementsByTagName("password").item(0).getTextContent());
-                    logger.info("UUID : " + eElement.getElementsByTagName("uuid").item(0).getTextContent());
-
-                }
-            }
-        }catch (SAXParseException e) {
-            logger.info("** Parsing error" + ", line "
-                    + e.getLineNumber () + ", uri " + e.getSystemId ());
-            logger.info(" " + e.getMessage ());
-
-        }catch (SAXException e) {
-            Exception x = e.getException ();
-            ((x == null) ? e : x).printStackTrace ();
-
-        }catch (Throwable t) {
-            t.printStackTrace ();
-        }
-
-        try {
-            // Get the ArrayList of values, password and uuid
-            // UUID index 1
-            ArrayList<String> values = userList.get(search_user);
-            if (values.get(0).equals(search_pw)){
+            // Check if the password in the XML equals the one in the passed form
+            if (user.getPassword().equals("")){
                 return true;
             }
         }catch (Exception e){
