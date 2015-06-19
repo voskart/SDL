@@ -128,7 +128,7 @@ public class LoginController {
     private boolean validateUserInXMLDB(User user) throws BaseXException {
 
         DatabaseService dbservice = new DatabaseService();
-        dbservice.getUserPasswordHash(user.getUsername());
+        // dbservice.getUserPasswordHash(user.getUsername());
         // logger.info(user.getPassword() + " " + password);
 
         try {

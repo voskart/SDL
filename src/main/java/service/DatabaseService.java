@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
+import model.User;
 import org.apache.log4j.Logger;
 import org.basex.BaseXServer;
 import org.basex.core.BaseXException;
@@ -28,6 +29,7 @@ import controller.RegistrationController;
 
 @Service
 public class DatabaseService {
+    // TODO Singleton
 	Context context;
     private static final Logger LOGGER = Logger.getLogger(String.valueOf(DatabaseService.class));
 	@Autowired 
@@ -73,6 +75,7 @@ public class DatabaseService {
 	    // Show information on the currently opened database
         LOGGER.info("\n* Show database information:");
 
+        LOGGER.info(getUserPasswordHash("user1"));
         LOGGER.info(new InfoDB().execute(context));
 
 
@@ -95,8 +98,12 @@ public class DatabaseService {
 	            "for $doc in collection()" +
 	            "let $file-path := base-uri($doc)" +
 	            "where ends-with($file-path, 'users.xml')" +
-                "return //users/user/username"
-	        ).execute(context));
+                "return //users/user[username eq '" + username + "']/password"
+	            ).execute(context));
 	}
+
+    public void insertNewUserData(User user){
+        // TODO
+    }
 
 }
