@@ -98,7 +98,7 @@ public class DatabaseService {
 	            "for $doc in collection()" +
 	            "let $file-path := base-uri($doc)" +
 	            "where ends-with($file-path, 'users.xml')" +
-                "return //users/user[username eq '" + username + "']/password"
+                "return data(//users/user[username eq '" + username + "']/password)"
 	            ).execute(context));
 	}
 
