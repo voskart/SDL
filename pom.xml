@@ -295,6 +295,12 @@
 			<version>1.14.8</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+    		<groupId>org.apache.jena</groupId>
+    		<artifactId>apache-jena-libs</artifactId>
+    		<type>pom</type>
+    		<version>2.13.0</version>
+  		</dependency>
 	</dependencies>
 	<build>
 		<finalName>SDL</finalName>
@@ -314,6 +320,8 @@
 				<version>2.2</version>
 				<configuration>
 					<server>myserver</server>
+					<username>tomcat</username>
+					<password>tomcat</password>
 				</configuration>
 			</plugin>
 			<plugin>
