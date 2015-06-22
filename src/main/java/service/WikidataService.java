@@ -30,7 +30,7 @@ public class WikidataService {
 	 * @param name the suffix of the Wikipedia-page
 	 * @return the content of the abstract property of that page
 	 */
-	private String getAbstract(String name){
+	public String getAbstract(String name){
 		String queryString = buildQueryString(name);
 		Query query = QueryFactory.create(queryString);
 		QueryExecution exec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);

@@ -12,9 +12,8 @@
 
 	</form>
 	<form name="infos">Informationen<br>
-	<table align="middle">
-	
-	</table></form>
+	${info}	
+	</form>
 	
 </body>
 </html>

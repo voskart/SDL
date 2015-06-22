@@ -1,4 +1,5 @@
 package controller;
+import service.WikidataService; 
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,6 +23,8 @@ public class HotOrNotController {
 	public String printWelcome(ModelMap model) {
 		String stone = ""; //hier muss der Link zu dem Bild des Steines hin
 		model.addAttribute("image", stone);
+		WikidataService wds = new WikidataService();
+		model.addAttribute("info", wds.getAbstract("Migmatite") );
 		return "HotOrNot";
 	}
 	
