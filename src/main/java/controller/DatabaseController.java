@@ -22,7 +22,8 @@ public class DatabaseController {
 	public String startDB() throws Exception{
 		log.info("Start DB");
 		dbService.openBasexDatabase();
-        return ("/login");
+//        return ("./login");
+		return "";
 	}
 	
 	@RequestMapping(value = "/stop", method = RequestMethod.GET)

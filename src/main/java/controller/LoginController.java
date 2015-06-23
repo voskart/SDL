@@ -1,42 +1,24 @@
 package controller;
 
-import com.ettrema.http.fs.ClassPathResourceFactory;
-
-import model.User;
-
-import org.basex.core.BaseXException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
-import java.util.logging.Logger;
-import java.io.File;
+import model.User;
 
-import org.springframework.web.context.support.ServletContextResource;
-import org.w3c.dom.*;
+import org.basex.core.BaseXException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import service.DatabaseService;
 
 /**
@@ -129,18 +111,19 @@ public class LoginController {
 
         // Get the dbservice instance
         // DatabaseService dbservice = new DatabaseService();
-        DatabaseService dbservice = new DatabaseService();
-        String tmp_pass = null;
+        DatabaseService dbservice = DatabaseService.getInstance();
+        String tmpPass = user.getPassword();
+        String userHash = null;
         try{
-            // tmp_pass = dbservice.getUserPasswordHash(user.getUsername());
+        	userHash = dbservice.getUserPasswordHash(user.getUsername());
         }catch (NullPointerException e){
             logger.info(e.getMessage());
         }
-            logger.info(user.getPassword() + " " + tmp_pass);
+            logger.info(user.getPassword() + " " + tmpPass);
 
         try {
             // Check if the password in the XML equals the one in the passed form
-            if (user.getPassword().equals(tmp_pass)){
+            if (user.getPassword().equals(userHash)){
                 return true;
             }
         }catch (Exception e){
