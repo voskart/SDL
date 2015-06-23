@@ -63,12 +63,12 @@ public class LoginController {
         // Check if the user is in the XML file
         if (tmp_bool){
             model.addAttribute("username", username);
-            return "successpage";
+            return "HotOrNot";
         }else{
             // Else return an errorpage
             model.addAttribute("username", username);
             model.addAttribute("password", passwordHash);
-            return "errorpage";
+            return "HotOrNot";
         }
     }
 

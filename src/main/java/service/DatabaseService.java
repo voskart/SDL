@@ -85,7 +85,6 @@ public class DatabaseService {
 
 		LOGGER.info(new InfoDB().execute(context));
 
-        LOGGER.info(getAllUsers());
 	}
 
 	public void closeBasexDatabase() throws BaseXException {
@@ -145,7 +144,11 @@ public class DatabaseService {
         String data = (new XQuery("for $doc in collection('Database')"
                 + " let $file-path := base-uri($doc)"
                 + " where ends-with($file-path, 'users.xml')"
-                + " return //users").execute(context));
+                + " return insert node <user>" +
+                "<username>" + user.getUsername() + "</username>" +
+                "<password>" + user.getPassword() + "</password>" +
+                "<uuid>" + user.getID() + "</uuid>" +
+                "</user> as last into //users").execute(context));
 
         return data;
 	}

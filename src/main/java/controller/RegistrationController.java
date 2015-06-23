@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import org.springframework.web.context.support.ServletContextResource;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import service.DatabaseService;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,6 +38,9 @@ import java.util.UUID;
 public class RegistrationController {
 
     @Autowired
+    private DatabaseService dbservice;
+
+    @Autowired
     private ServletContext servletContext;
     private static final Logger logger = Logger.getLogger(String.valueOf(RegistrationController.class));
 
@@ -50,10 +54,18 @@ public class RegistrationController {
         // Create the user-object if needed
         User user = new User(username, password, uuid.toString());
         // Save user to XML-file
-        saveUserToXML(user);
+        saveUser(user);
         // Redirect user to needed page, you can also pass the user-object once again
         model.addAttribute(model.addAttribute("username", username));
-        return "successpage";
+        return "HotOrNot";
+    }
+
+    private void saveUser(User _user){
+        try {
+            dbservice.insertNewUserData(_user);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void saveUserToXML(User _user){
