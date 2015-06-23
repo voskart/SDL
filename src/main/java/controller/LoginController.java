@@ -28,6 +28,9 @@ import service.DatabaseService;
 @RequestMapping("/login")
 public class LoginController {
 
+	@Autowired
+    private DatabaseService dbservice;
+	
     @Autowired
     private ServletContext servletContext;
     private static final Logger logger = Logger.getLogger(String.valueOf(LoginController.class));
@@ -111,7 +114,7 @@ public class LoginController {
 
         // Get the dbservice instance
         // DatabaseService dbservice = new DatabaseService();
-        DatabaseService dbservice = DatabaseService.getInstance();
+//        DatabaseService dbservice = DatabaseService.getInstance();
         String tmpPass = user.getPassword();
         String userHash = null;
         try{

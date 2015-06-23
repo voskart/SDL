@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 import model.User;
 
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.descriptor.web.ContextHandler;
 import org.basex.core.BaseXException;
 import org.basex.core.Context;
 import org.basex.core.cmd.Add;
@@ -24,20 +25,10 @@ import org.springframework.web.context.support.ServletContextResource;
 @Service
 public class DatabaseService {
 
-	private static DatabaseService instance;
-
-	public static DatabaseService getInstance() {
-		if (DatabaseService.instance == null) {
-			DatabaseService.instance = new DatabaseService();
-		}
-		return DatabaseService.instance;
-	}
-
-	protected DatabaseService() {
+	public DatabaseService() {
 		this.context = new Context();
 	}
 
-	// TODO DBService as Singleton
 	private static final Logger LOGGER = Logger.getLogger(String
 			.valueOf(DatabaseService.class));
 
@@ -77,9 +68,9 @@ public class DatabaseService {
 		Add add = new Add("users.xml");
 		add.setInput(inputStreamUsers);
 		add.execute(context);
-
+		
 		new Optimize().execute(context);
-
+		
 		// Show information on the currently opened database
 		LOGGER.info("\n* Show database information:");
 
@@ -99,11 +90,13 @@ public class DatabaseService {
 	}
 
 	public String getUserPasswordHash(String username) throws BaseXException {
-		return (new XQuery("for $doc in collection('Database')"
+		String getUserPasswordHashResult = new XQuery("for $doc in collection('Database')"
 				+ " let $file-path := base-uri($doc)"
 				+ " where ends-with($file-path, 'users.xml')"
 				+ " return data(//users/user[username eq '" + username
-				+ "']/password)").execute(context));
+				+ "']/password)").execute(context);
+		LOGGER.info("### getUserPasswordHashResult: " + getUserPasswordHashResult);
+		return getUserPasswordHashResult;
 	}
 
 	public void insertNewUserData(User user) {
