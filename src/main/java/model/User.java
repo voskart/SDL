@@ -1,6 +1,6 @@
 package model;
 
-import Interfaces.IRateable;
+import interfaces.IRateable;
 
 /**
  * Created by voskart on 11.06.15.
