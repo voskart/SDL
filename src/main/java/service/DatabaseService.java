@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import interfaces.IRateable;
 import model.User;
 
 import org.apache.log4j.Logger;
@@ -81,8 +82,9 @@ public class DatabaseService {
 		// Show information on the currently opened database
 		LOGGER.info("\n* Show database information:");
 
-//		LOGGER.info(getUserPasswordHash("user1"));
 		LOGGER.info(new InfoDB().execute(context));
+
+        LOGGER.info(insertNewUserData(null));
 	}
 
 	public void closeBasexDatabase() throws BaseXException {
@@ -122,11 +124,28 @@ public class DatabaseService {
 		    System.out.println(p.toString());
 		}
 		return stones;
-		
 	}
+
+    public List<User> getAllUsers() throws BaseXException {
+        String data = (new XQuery("for $doc in collection('Database')"
+                + " let $file-path := base-uri($doc)"
+                + " where ends-with($file-path, 'users.xml')"
+                + " return //users").execute(context));
+        XmlDeserializer deserializer = XmlIOFactory.createFactory(ImportStone.class).createDeserializer();
+        StringReader reader = new StringReader(data);
+        deserializer.open(reader);
+        List<User> users = new ArrayList();
+        while (deserializer.hasNext()) {
+            User p = deserializer.next();
+            users.add(p);
+            System.out.println(p.toString());
+        }
+        return users;
+    }
 	
-	public void insertNewUserData(User user) {
-		// TODO
+	public String insertNewUserData(User user) throws BaseXException {
+        String data = (new XQuery("return //users").execute(context));
+        return data;
 	}
 
 }

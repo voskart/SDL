@@ -25,6 +25,7 @@
                 <form action="login" method="POST">
                     <input type="text" name="username" class="form-control" placeholder="username" required autofocus>
                     <input type="password" name="password" class="form-control" placeholder="password" required>
+                    <br>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">
                         Sign in</button>
                 </form>
