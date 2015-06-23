@@ -42,7 +42,6 @@ public class User implements IRateable {
         this.uuid = uuid;
     }
 
-    @Override
     public String getID() {
         return this.uuid;
     }
