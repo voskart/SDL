@@ -5,32 +5,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/*
- *
- * Grundprinzip: 	- Nehme die Votings sowie den Durchschnittsvoting-Wert eines Users und
- * 					baue die users_users Matrix auf.
- * 					- Suche zu einem gegebenen User in der Zeile die gr√∂√üten Werte heraus,
- * 					packe Sie in eine Liste, sortiere diese Liste und gebe die gew√ºnschte
- * 					Anzahl an Usern zur√ºck (Neighbourhood). 
- * 					- Ermittel alle Filme der erhaltenen Nachbarn, die der User noch nicht gesehen hat,
- * 					addiere die jeweiligen Wertungen dieser auf. 
- * 					- Sortiere diese Wertungsliste ebenfalls und gebe die gew√ºnschte Anzahl an
- * 					Empfehlungen zur√ºck. 
- *
+/**
+ * Diese Klasse repr‰sentiert einen Recommender, die die ƒhnlicjkeit von
+ * Benutzern ausrechnet und auf dieser Grundlage Vorschl‰ge f¸r Steinen
+ * errechnet, die einen Nutzer interesiieren kˆnnten.
+ * 
+ * @author benny
+ * 
  */
-
 public class Recommender {
 	private static int ARRAYSIZE;
 
 	// Matrix, welche die Ratings enth‰lt (users_movies[userId][movieId] =
 	// rating)
-	private int users_stones[][] = null;// new int[ARRAYSIZE][ARRAYSIZE];
-
-	// Speichert die Sim zwischen verschiedenen Usern. Daten werden
-	// redundant gespeichert. Hier k√∂nnte eine Optimierung durch-
-	// gef√ºhrt werden, in dem nur die halbe Matrix bef√ºllt und
-	// gelesen wird
-	private double users_users[][] = null; // ;new double[ARRAYSIZE][ARRAYSIZE];
+	private int users_stones[][] = null;
+	private double users_users[][] = null;
 
 	private Map<Integer, String> stoneNames;
 
@@ -46,36 +35,6 @@ public class Recommender {
 
 	}
 
-//	/**
-//	 * Liest die Steine in eine HashMap ein.
-//	 * 
-//	 * @param stonePath
-//	 */
-//	private void importStones(String stonePath) {
-//		BufferedReader br = null;
-//		try {
-//			br = new BufferedReader(new FileReader(stonePath));
-//			String line;
-//			String split_line[] = null;
-//
-//			// Liest die Filmnamen ein, wobei der Index f√ºr die jeweilige
-//			// Film-ID steht.
-//			while ((line = br.readLine()) != null) {
-//				split_line = line.split("\\|");
-//				stoneNames.put(Integer.parseInt(split_line[0]), split_line[1]);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				br.close();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//
-//	}
-
 	/**
 	 * Initialisiert die Matrizen auf denen die Berechnungen stattfinden.
 	 */
@@ -88,6 +47,7 @@ public class Recommender {
 	 * Liest die Ratings der Nutzer eine Matrix ein.
 	 * 
 	 * @param ratings
+	 *            Bewertungen des Nutzers
 	 */
 	private void importRatings(List<Rating> ratings) {
 		for (Rating r : ratings) {
@@ -95,18 +55,23 @@ public class Recommender {
 		}
 	}
 
-	// Berechnet das arithmetische Mittel aller abgegebenen Votings eines
-	// gegebenen Benutzers.
-	public double getMeanOfUser(int user) {
+	/**
+	 * Berechnet das arithmetische Mittel aller abgegebenen Votings eines
+	 * gegebenen Benutzers.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public double getMeanOfUser(int userId) {
 		int numberOfVotes = 0;
 		int absolut = 0;
 		for (int i = 0; i < ARRAYSIZE; i++) {
-			if (users_stones[user][i] > 0) {
-				absolut = absolut + users_stones[user][i];
+			if (users_stones[userId][i] > 0) {
+				absolut = absolut + users_stones[userId][i];
 				numberOfVotes++;
 			}
 		}
-		// Falls User nicht existiert und somit keine Votes existieren
+		// Falls User nicht existiert und somit keine Bewertungen existieren
 		if (numberOfVotes == 0) {
 			return 0;
 		} else {
@@ -114,10 +79,11 @@ public class Recommender {
 		}
 	}
 
-	// Generiert die Sim Matrix.
+	/**
+	 * Erzeugt eine Matrix, die die ƒhnlickeiten der Nutzer untereinander
+	 * enth‰lt.
+	 */
 	private void generateSimTable() {
-		// Doppelt verschachtelte for-Schleife pr√ºft jeden
-		// User mit jedem User (folglich doppelt)
 		for (int userA = 1; userA < ARRAYSIZE; userA++) {
 			for (int userB = 1; userB < ARRAYSIZE; userB++) {
 				// intersection enth√§lt die Schnittmenge der Filme, f√ºr die
@@ -180,6 +146,7 @@ public class Recommender {
 
 	// Berechnet die Schnittmenge an Filmen, f√ºr die beide Personen abgestimmt
 	// haben
+	
 	private ArrayList<Integer> getIntersectionOf(int userA, int userB) {
 		ArrayList<Integer> intersection = new ArrayList<Integer>();
 		for (int i = 0; i < ARRAYSIZE; i++) {
@@ -256,12 +223,11 @@ public class Recommender {
 		// auf den Index zu verlieren
 		Collections.sort(stones);
 
-
 		List<Stone> retList = new ArrayList<Stone>();
 		Stone tempStone = null;
 		for (int i = 0; i < recommendations; i++) {
 			tempStone = stones.get(i);
-			tempStone.setName(stoneNames.get(i));
+			tempStone.setName(stoneNames.get(tempStone.getId()));
 			retList.add(tempStone);
 		}
 		return retList;
