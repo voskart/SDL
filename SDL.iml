@@ -103,13 +103,13 @@
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.8.5" level="project" />
     <orderEntry type="library" name="Maven: javax.xml:jaxp-api:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.parsers:jaxp-api:1.4.5" level="project" />
-    <orderEntry type="library" name="Maven: org.basex:basex:7.6" level="project" />
-    <orderEntry type="library" name="Maven: org.basex:basex-api:7.6" level="project" />
+    <orderEntry type="library" name="Maven: org.basex:basex:7.7" level="project" />
+    <orderEntry type="library" name="Maven: org.basex:basex-api:7.7" level="project" />
     <orderEntry type="library" name="Maven: net.xqj:basex-xqj:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: com.xqj2:xqj2:0.1.0" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.xquery:xqj-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.xmldb:xmldb-api:1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.ettrema:milton-api:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: com.ettrema:milton-api:1.8.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.jdom:jdom:1.1" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.4" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />
@@ -152,6 +152,14 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient-cache:4.2.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.thrift:libthrift:0.9.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-csv:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:webjars-locator:0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.8" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
+    <orderEntry type="library" name="Maven: javassist:javassist:3.12.1.GA" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:jquery:2.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:bootstrap:3.0.0" level="project" />
   </component>
 </module>
 

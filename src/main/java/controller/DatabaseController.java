@@ -13,7 +13,6 @@ import service.DatabaseService;
 @RequestMapping("/db")
 public class DatabaseController {
 
-	@Autowired
 	private DatabaseService dbService;
     private static final Logger log = Logger.getLogger(String.valueOf(DatabaseController.class));
 	
