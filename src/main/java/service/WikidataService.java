@@ -12,30 +12,36 @@ import com.hp.hpl.jena.query.ResultSetFormatter;
 @Service
 public class WikidataService {
 	
-	private static String buildQueryString(String name){
+	private static String buildQueryString(String stoneID){
 		return ""
-				+ "PREFIX dbpedia: <http://dbpedia.org/resource/>"
-				+ "PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>"
-				+ "select ?abstract"
-				+ " where {"
-				+ "dbpedia:"
-				+ name
-				+ " dbpedia-owl:abstract ?abstract."
-				+ "filter(langMatches(lang(?abstract),\"de\"))"
+				+ "PREFIX dbpedia:<http://dbpedia.org/resource/>"
+				+ "PREFIX owl:<http://www.w3.org/2002/07/owl#>"
+				+ "PREFIX dbpedia-owl:<http://dbpedia.org/ontology/>"
+				+ "PREFIX wikidata: <http://wikidata.dbpedia.org/resource/>"
+				+ "SELECT ?abstract"
+				+ " WHERE {"
+				+ "?stein owl:sameAs wikidata:"
+				+ stoneID
+				+ "."
+				+ "?stein dbpedia-owl:abstract ?abstract"
+				+ " filter(langMatches(lang(?abstract),\"de\"))"
 				+ "}";
 	};
 
 	/**
 	 * 
-	 * @param name the suffix of the Wikipedia-page
+	 * @param stoneID the suffix of the Wikipedia-page
 	 * @return the content of the abstract property of that page
 	 */
-	public String getAbstract(String name){
-		String queryString = buildQueryString(name);
+	public String getAbstract(String stoneID){
+		String queryString = buildQueryString(stoneID);
 		Query query = QueryFactory.create(queryString);
 		QueryExecution exec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
 		ResultSet set = exec.execSelect();
-		return ResultSetFormatter.asText(set);		
+		String wikiAbstract = set.next().toString();
+		wikiAbstract=wikiAbstract.replace("( ?abstract = \"", "");
+		wikiAbstract=wikiAbstract.replace("\"@de )", "");
+		return wikiAbstract;
 	}
 	
 	
@@ -43,6 +49,6 @@ public class WikidataService {
 	public static void main(String[] args) {
 		//Beispiel
 		WikidataService wds = new WikidataService();
-		System.out.println(wds.getAbstract("Migmatite"));
+		System.out.println(wds.getAbstract("Q744630"));
     }
 }
