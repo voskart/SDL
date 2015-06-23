@@ -68,7 +68,7 @@ public class LoginController {
             // Else return an errorpage
             model.addAttribute("username", username);
             model.addAttribute("password", passwordHash);
-            return "HotOrNot";
+            return "errorpage";
         }
     }
 
