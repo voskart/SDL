@@ -24,7 +24,7 @@ public class HotOrNotController {
 		String stone = ""; //hier muss der Link zu dem Bild des Steines hin
 		model.addAttribute("image", stone);
 		WikidataService wds = new WikidataService();
-		model.addAttribute("info", wds.getAbstract("Migmatite") );
+		model.addAttribute("info", wds.getAbstract("Q744630") );
 		return "HotOrNot";
 	}
 	

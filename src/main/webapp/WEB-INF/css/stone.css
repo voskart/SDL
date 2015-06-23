@@ -1,0 +1,5 @@
+div {
+    display: table; /* shrink wrap the contents */
+    margin: 0 auto; /* center via left/right margins */
+    width: 600px;
+}

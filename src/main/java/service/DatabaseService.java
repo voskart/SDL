@@ -29,59 +29,59 @@ import controller.RegistrationController;
 
 @Service
 public class DatabaseService {
-    // TODO Singleton
-	Context context;
+
+    // TODO DBService as Singleton
     private static final Logger LOGGER = Logger.getLogger(String.valueOf(DatabaseService.class));
-	@Autowired 
-	private ServletContext servletContext;
 
-	public void startDB() throws Exception {
+    @Autowired
+    private ServletContext servletContext = null;
 
-	    // Create database context
-	    context = new Context();
+    Context context = new Context();
 
-	    LOGGER.info("=== CreateCollection ===");
+    // TODO Singleton
 
-	    new Set("CREATEFILTER", "*.xml").execute(context);
+    public void openBasexDatabase() throws IOException {
+
+        LOGGER.info("=== CreateCollection ===");
+
+        new Set("CREATEFILTER", "*.xml").execute(context);
 
 
-	    new CreateDB("Database").execute(context);
-
-
+        new CreateDB("Database").execute(context);
 
 
         LOGGER.info("\n* Create a collection.");
-		ServletContextResource resource = new ServletContextResource(servletContext, 
-			    "/WEB-INF/content/outpput.xml");
-		InputStream inputStream = resource.getInputStream();
-	    Add addx = new Add("outpput.xml");
-	    addx.setInput(inputStream);
-	    addx.execute(context);
-		
-		
+        ServletContextResource resource = new ServletContextResource(servletContext,
+                "/WEB-INF/content/outpput.xml");
+        InputStream inputStream = resource.getInputStream();
+        Add addx = new Add("outpput.xml");
+        addx.setInput(inputStream);
+        addx.execute(context);
 
-		ServletContextResource userResource = new ServletContextResource(servletContext,
-			    "/WEB-INF/content/users.xml");
-		
-		InputStream inputStreamUsers = userResource.getInputStream();
-	    Add add = new Add("users.xml");
-	    add.setInput(inputStreamUsers);
-	    add.execute(context);
 
-	    new Optimize().execute(context);
-		
-		
+        ServletContextResource userResource = new ServletContextResource(servletContext,
+                "/WEB-INF/content/users.xml");
 
-	    // Show information on the currently opened database
+        InputStream inputStreamUsers = null;
+        try {
+            inputStreamUsers = userResource.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Add add = new Add("users.xml");
+        add.setInput(inputStreamUsers);
+        add.execute(context);
+
+        new Optimize().execute(context);
+
+
+        // Show information on the currently opened database
         LOGGER.info("\n* Show database information:");
 
-        LOGGER.info(getUserPasswordHash("user1"));
         LOGGER.info(new InfoDB().execute(context));
+    }
 
-
-	}
-
-	public void stopDB() throws IOException {
+	public void closeBasexDatabase() throws BaseXException {
 	    // Create database context
 	    context = new Context();	    // Drop the database
 	    System.out.println("\n* Drop the collection.");

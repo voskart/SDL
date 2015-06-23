@@ -21,15 +21,15 @@ public class DatabaseController {
 	@RequestMapping(value = "/start", method = RequestMethod.GET)
 	public String startDB() throws Exception{
 		log.info("Start DB");
-		dbService.startDB();
-        return ("login");
+		dbService.openBasexDatabase();
+        return ("/login");
 	}
 	
 	@RequestMapping(value = "/stop", method = RequestMethod.GET)
 	public String stopDB() throws Exception{
 		log.info("Stop DB");
-		dbService.stopDB();
-        return ("login");
+		dbService.closeBasexDatabase();
+        return ("/login");
 	}
 	
 }

@@ -127,13 +127,20 @@ public class LoginController {
 
     private boolean validateUserInXMLDB(User user) throws BaseXException {
 
+        // Get the dbservice instance
+        // DatabaseService dbservice = new DatabaseService();
         DatabaseService dbservice = new DatabaseService();
-        // dbservice.getUserPasswordHash(user.getUsername());
-        // logger.info(user.getPassword() + " " + password);
+        String tmp_pass = null;
+        try{
+            // tmp_pass = dbservice.getUserPasswordHash(user.getUsername());
+        }catch (NullPointerException e){
+            logger.info(e.getMessage());
+        }
+            logger.info(user.getPassword() + " " + tmp_pass);
 
         try {
             // Check if the password in the XML equals the one in the passed form
-            if (user.getPassword().equals("")){
+            if (user.getPassword().equals(tmp_pass)){
                 return true;
             }
         }catch (Exception e){
