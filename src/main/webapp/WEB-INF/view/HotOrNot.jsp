@@ -40,12 +40,12 @@
 <div>
     <br>
     <form  action="HotOrNot" method="POST">
-        <button class="btn btn-lg btn-primary btn-block" value="hot" name="x" type="submit">
+        <button class="btn btn-lg btn-success btn-block" value="hot" name="x" type="submit">
             HOT</button>
 	</form >
 <br>
     <form action="HotOrNot" method="POST">
-        <button class="btn btn-lg btn-primary btn-block" value="not" name="x" type="submit">
+        <button class="btn btn-lg btn-danger btn-block" value="not" name="x" type="submit">
             NOT</button>
 	</form>
 </div>
