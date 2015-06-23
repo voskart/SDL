@@ -2,6 +2,9 @@ package service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -18,9 +21,13 @@ import org.basex.core.cmd.InfoDB;
 import org.basex.core.cmd.Optimize;
 import org.basex.core.cmd.Set;
 import org.basex.core.cmd.XQuery;
+import org.jsefa.xml.XmlDeserializer;
+import org.jsefa.xml.XmlIOFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.ServletContextResource;
+
+import CSV2XML.ImportStone;
 
 @Service
 public class DatabaseService {
@@ -99,6 +106,25 @@ public class DatabaseService {
 		return getUserPasswordHashResult;
 	}
 
+	
+	public List<ImportStone> getAllStones() throws BaseXException {
+		String data = (new XQuery("for $doc in collection('Database')"
+				+ " let $file-path := base-uri($doc)"
+				+ " where ends-with($file-path, 'users.xml')"
+				+ " return //stones").execute(context));
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(ImportStone.class).createDeserializer();
+		StringReader reader = new StringReader(data);
+		deserializer.open(reader);
+		List<ImportStone> stones = new ArrayList();
+		while (deserializer.hasNext()) {
+		    ImportStone p = deserializer.next();
+		    stones.add(p);
+		    System.out.println(p.toString());
+		}
+		return stones;
+		
+	}
+	
 	public void insertNewUserData(User user) {
 		// TODO
 	}

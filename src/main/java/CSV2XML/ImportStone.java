@@ -140,7 +140,10 @@ public class ImportStone {
     	return stone;
     }
 
-
+    public String toString(){
+    	return "ID: "+this.InvNr1+", Link: "+this.Link;
+    }
+    
 	public ImportStone() {
 	}
 
