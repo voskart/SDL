@@ -6,11 +6,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>SDL</title>
 </head>
-<body><h1>Wilkommen zu Steine der Leidenschaft</h1>
-	<form action="HotOrNot" method="POST">
-		<input type="image" title="not" name="x" value="not" src="path3149.png" style="cursor: hand"></form><img border="10px" src="${image}" ><form><input type="image" name="x" src="path3139.png" title="hot" value="hot" style="cursor: hand">
+<body><h1>Wilkommen zu Steine der Leidenschaft Dummy</h1>
 
+		<img border="10px" src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Chalcopyrite-Magnetite-cktsr-10c.jpg" style="height: 267px; width: 386px; ">
+	<form  action="HotOrNot" method="POST" style="width: 338px; ">
+		<input type="submit" title="hot" name="x" value="hot" src="hot.jpg" style="cursor: hand"">
+	</form ><form action="HotOrNot" method="POST" style="width: 335px; ">
+		<input type="submit" title="not" value="not" name="x" src="path3149.png" style="cursor: hand">
 	</form>
+	
 	<form name="infos">Informationen<br>
 	${info}	
 	</form>
