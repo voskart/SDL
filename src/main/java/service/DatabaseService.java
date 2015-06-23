@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -84,7 +85,7 @@ public class DatabaseService {
 
 		LOGGER.info(new InfoDB().execute(context));
 
-        LOGGER.info(insertNewUserData(null));
+        LOGGER.info(getAllUsers());
 	}
 
 	public void closeBasexDatabase() throws BaseXException {
@@ -126,26 +127,29 @@ public class DatabaseService {
 		return stones;
 	}
 
-    public List<User> getAllUsers() throws BaseXException {
+    // Returns all the usernames in a list (all usernames in form of a list)
+    public List<String> getAllUsers() throws BaseXException {
+        String data = (new XQuery("for $doc in collection('Database')"
+                + " let $file-path := base-uri($doc)"
+                + " where ends-with($file-path, 'users.xml')"
+                + " return data(//users/user/username)").execute(context));
+
+        // If more values needed: return concat data(//users/user/username) + ' ' + data(//users/user/uuid)
+        String userArray[] = data.split("\\r?\\n");
+        // Convert to an ArrayList just for Benny <3
+        List<String> userList = Arrays.asList(userArray);
+        return userList;
+    }
+	
+	public String insertNewUserData(User user) throws BaseXException {
         String data = (new XQuery("for $doc in collection('Database')"
                 + " let $file-path := base-uri($doc)"
                 + " where ends-with($file-path, 'users.xml')"
                 + " return //users").execute(context));
-        XmlDeserializer deserializer = XmlIOFactory.createFactory(ImportStone.class).createDeserializer();
-        StringReader reader = new StringReader(data);
-        deserializer.open(reader);
-        List<User> users = new ArrayList();
-        while (deserializer.hasNext()) {
-            User p = deserializer.next();
-            users.add(p);
-            System.out.println(p.toString());
-        }
-        return users;
-    }
-	
-	public String insertNewUserData(User user) throws BaseXException {
-        String data = (new XQuery("return //users").execute(context));
+
         return data;
 	}
+
+
 
 }
