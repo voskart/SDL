@@ -22,7 +22,7 @@ import org.jsefa.xml.annotation.XmlElement;
 @Table(name = "ImportStones")
 @XmlDataType(defaultElementName = "stone")
 @CsvDataType()
-public class ImportStone implements org.codehaus.jackson.map.JsonSerializableWithType {
+public class ImportStones implements org.codehaus.jackson.map.JsonSerializableWithType {
 
 	@Id
 	@GeneratedValue

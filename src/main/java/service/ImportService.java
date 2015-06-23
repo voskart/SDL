@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 import javax.servlet.ServletContext;
 
-import model.ImportStone;
+import model.ImportStones;
 
 import org.apache.log4j.Logger;
 import org.jsefa.xml.XmlDeserializer;
