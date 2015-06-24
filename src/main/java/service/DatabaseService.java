@@ -82,6 +82,8 @@ public class DatabaseService {
 		LOGGER.info("\n* Show database information:");
 
 		LOGGER.info(new InfoDB().execute(context));
+		
+		getAllStones();
 
 	}
 
