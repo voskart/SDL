@@ -92,47 +92,6 @@ public class DatabaseService {
 		getAllStones();
 		xqc.close();
 
-		/*
-		 * LOGGER.info("=== CreateCollection ===");
-		 * 
-		 * new Set("CREATEFILTER", "*.xml").execute(context);
-		 * 
-		 * new DropDB("Database").execute(context); new Set("writeback",
-		 * true).execute(context); new Set("MAINMEM", false).execute(context);
-		 * 
-		 * 
-		 * 
-		 * new Set("writeback", true).execute(context); new Set("MAINMEM",
-		 * false).execute(context);
-		 * 
-		 * 
-		 * 
-		 * LOGGER.info("\n* Create a collection."); CreateDB db = new
-		 * CreateDB("Database", userResource.getPath()); db.execute(context);
-		 * 
-		 * LOGGER.info(resource.getPath());
-		 * LOGGER.info(resource.getPathWithinContext());
-		 * LOGGER.info(resource.getURL()); InputStream inputStream =
-		 * resource.getInputStream(); Add addx = new Add("outpput.xml");
-		 * addx.setInput(inputStream); addx.execute(context);
-		 * 
-		 * 
-		 * 
-		 * InputStream inputStreamUsers = null; try { inputStreamUsers =
-		 * userResource.getInputStream(); } catch (IOException e) {
-		 * e.printStackTrace(); } Add add = new Add("users.xml");
-		 * add.setInput(inputStreamUsers); add.execute(context);
-		 * 
-		 * new Set("writeback", true).execute(context); new Set("MAINMEM",
-		 * false).execute(context); new Optimize().execute(context);
-		 * 
-		 * new Set("writeback", true).execute(context); new Set("MAINMEM",
-		 * false).execute(context); // Show information on the currently opened
-		 * database LOGGER.info("\n* Show database information:");
-		 * 
-		 * LOGGER.info(new InfoDB().execute(context));
-		 */
-		getAllUsers();
 
 	}
 

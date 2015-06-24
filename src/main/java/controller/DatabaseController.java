@@ -33,6 +33,8 @@ public class DatabaseController {
         return ("hello");
 	}
 	
+	
+	//Z.B: http://localhost:8080/SDL/db/export?path="C:/database"
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	public String exportDB(HttpServletRequest request) throws Exception{
 		log.info("Export DB to"+request.getParameter("path"));
