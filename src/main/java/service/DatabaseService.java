@@ -9,11 +9,9 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
-import interfaces.IRateable;
 import model.User;
 
 import org.apache.log4j.Logger;
-import org.apache.tomcat.util.descriptor.web.ContextHandler;
 import org.basex.core.BaseXException;
 import org.basex.core.Context;
 import org.basex.core.cmd.Add;
@@ -117,7 +115,7 @@ public class DatabaseService {
 		XmlDeserializer deserializer = XmlIOFactory.createFactory(ImportStone.class).createDeserializer();
 		StringReader reader = new StringReader(data);
 		deserializer.open(reader);
-		List<ImportStone> stones = new ArrayList();
+		List<ImportStone> stones = new ArrayList<ImportStone>();
 		while (deserializer.hasNext()) {
 		    ImportStone p = deserializer.next();
 		    stones.add(p);
@@ -147,7 +145,7 @@ public class DatabaseService {
                 + " return insert node <user>" +
                 "<username>" + user.getUsername() + "</username>" +
                 "<password>" + user.getPassword() + "</password>" +
-                "<uuid>" + user.getID() + "</uuid>" +
+                "<uuid>" + user.getId() + "</uuid>" +
                 "</user> as last into //users").execute(context));
 
         return data;

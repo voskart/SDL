@@ -1,6 +1,7 @@
 package model;
 
-import interfaces.IRateable;
+import interfaces.IId;
+
 import org.jsefa.xml.annotation.XmlDataType;
 import org.jsefa.xml.annotation.XmlElement;
 
@@ -8,7 +9,7 @@ import org.jsefa.xml.annotation.XmlElement;
  * Created by voskart on 11.06.15.
  */
 @XmlDataType(defaultElementName = "user")
-public class User implements IRateable {
+public class User implements IId {
 
     @XmlElement(name = "username", pos = 1)
     private String username;
@@ -17,9 +18,9 @@ public class User implements IRateable {
     private String password;
 
     @XmlElement(name = "uuid", pos = 3)
-    private String uuid;
+    private Integer uuid;
 
-    public User(String username, String password, String uuid){
+    public User(String username, String password, Integer uuid){
         this.username = username;
         this.password = password;
         this.uuid = uuid;
@@ -46,16 +47,17 @@ public class User implements IRateable {
         this.password = password;
     }
 
-    public void setUuid(String uuid) {
+    public void setId(Integer uuid) {
         this.uuid = uuid;
     }
 
-    public String getID() {
-        return this.uuid;
-    }
-
     @Override
-    public String toString(){ return this.username + " " + this.getPassword() + " " + this.getID();}
+    public String toString(){ return this.username + " " + this.getPassword() + " " + this.getId();}
 
     public User(){}
+
+	@Override
+	public Integer getId() {
+		return this.uuid;
+	}
 }

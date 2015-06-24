@@ -38,7 +38,9 @@ public class RegistrationController {
         // We now generate a unique identifier for the user
         UUID uuid = UUID.randomUUID();
         // Create the user-object if needed
-        User user = new User(username, password, uuid.toString());
+        
+        // FIXME ARTE: ID als Integer
+        User user = new User(username, password, Integer.parseInt(uuid.toString()));
         // Save user to XML-file
         saveUser(user);
         // Redirect user to needed page, you can also pass the user-object once again
