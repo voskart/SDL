@@ -3,8 +3,8 @@
 <div class="container">
 	<h1>${message}</h1>
 
-    <a href="/login" class="text-center new-account">Sign in</a>
-    <a href="/registration" class="text-center new-account">Create an account </a>
+    <a href="/SDL/login" class="text-center new-account">Sign in</a>
+    <a href="/SDL/registration" class="text-center new-account">Create an account </a>
 </div>
 </body>
 </html>
