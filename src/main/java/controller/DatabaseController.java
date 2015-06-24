@@ -22,14 +22,14 @@ public class DatabaseController {
 		log.info("Start DB");
 		dbService.openBasexDatabase();
 //        return ("./login");
-		return "";
+		return "hello";
 	}
 	
 	@RequestMapping(value = "/stop", method = RequestMethod.GET)
 	public String stopDB() throws Exception{
 		log.info("Stop DB");
 		dbService.closeBasexDatabase();
-        return ("/login");
+        return ("hello");
 	}
 	
 }

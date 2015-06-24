@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import interfaces.IRateable;
 import model.User;
 
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.descriptor.web.ContextHandler;
 import org.basex.core.BaseXException;
 import org.basex.core.Context;
 import org.basex.core.cmd.Add;
@@ -59,7 +62,7 @@ public class DatabaseService {
 		Add addx = new Add("outpput.xml");
 		addx.setInput(inputStream);
 		addx.execute(context);
-
+		
 		new Optimize().execute(context);
 
 		ServletContextResource userResource = new ServletContextResource(
@@ -74,17 +77,14 @@ public class DatabaseService {
 		Add add = new Add("users.xml");
 		add.setInput(inputStreamUsers);
 		add.execute(context);
-
+		
 		new Optimize().execute(context);
-
+		
 		// Show information on the currently opened database
 		LOGGER.info("\n* Show database information:");
 
-		// LOGGER.info(getUserPasswordHash("user1"));
 		LOGGER.info(new InfoDB().execute(context));
 
-		getAllStones();
-		getAllUsers();
 	}
 
 	public void closeBasexDatabase() throws BaseXException {
@@ -99,64 +99,60 @@ public class DatabaseService {
 	}
 
 	public String getUserPasswordHash(String username) throws BaseXException {
-		String getUserPasswordHashResult = new XQuery(
-				"for $doc in collection('Database')"
-						+ " let $file-path := base-uri($doc)"
-						+ " where ends-with($file-path, 'users.xml')"
-						+ " return data(//users/user[username eq '" + username
-						+ "']/password)").execute(context);
-		LOGGER.info("### getUserPasswordHashResult: "
-				+ getUserPasswordHashResult);
+		String getUserPasswordHashResult = new XQuery("for $doc in collection('Database')"
+				+ " let $file-path := base-uri($doc)"
+				+ " where ends-with($file-path, 'users.xml')"
+				+ " return data(//users/user[username eq '" + username
+				+ "']/password)").execute(context);
+		LOGGER.info("### getUserPasswordHashResult: " + getUserPasswordHashResult);
 		return getUserPasswordHashResult;
 	}
 
+	
 	public List<ImportStone> getAllStones() throws BaseXException {
 		String data = (new XQuery("for $doc in collection('Database')"
 				+ " let $file-path := base-uri($doc)"
 				+ " where ends-with($file-path, 'users.xml')"
 				+ " return //stones").execute(context));
-		XmlDeserializer deserializer = XmlIOFactory.createFactory(
-				ImportStone.class).createDeserializer();
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(ImportStone.class).createDeserializer();
 		StringReader reader = new StringReader(data);
 		deserializer.open(reader);
-		List<ImportStone> stones = new ArrayList<ImportStone>();
+		List<ImportStone> stones = new ArrayList();
 		while (deserializer.hasNext()) {
-			ImportStone p = deserializer.next();
-			stones.add(p);
+		    ImportStone p = deserializer.next();
+		    stones.add(p);
+		    System.out.println(p.toString());
 		}
 		return stones;
-
 	}
 
-	public void insertNewUserData(User user) throws BaseXException {
-		String username = user.getUsername();
-		String passHash = user.getPassword();
-		String id = user.getID();
-		
-		String insertQuery = "insert node <user>"
-				+ "<username>" + username + "</username>"
-				+ "<password>" + passHash + "</password>"
-				+ "<uuid>" + id + "</uuid>"
-				+ "</user>";
-		new XQuery(insertQuery).execute(context);
-	}
+    // Returns all the usernames in a list (all usernames in form of a list)
+    public List<String> getAllUsers() throws BaseXException {
+        String data = (new XQuery("for $doc in collection('Database')"
+                + " let $file-path := base-uri($doc)"
+                + " where ends-with($file-path, 'users.xml')"
+                + " return data(//users/user/username)").execute(context));
+
+        // If more values needed: return concat data(//users/user/username) + ' ' + data(//users/user/uuid)
+        String userArray[] = data.split("\\r?\\n");
+        // Convert to an ArrayList just for Benny <3
+        List<String> userList = Arrays.asList(userArray);
+        return userList;
+    }
 	
-	public List<User> getAllUsers() throws BaseXException{
-		String data = (new XQuery("for $doc in collection('Database')"
-				+ " let $file-path := base-uri($doc)"
-				+ " where ends-with($file-path, 'users.xml')"
-				+ " return (for $x in /users/user return $x)").execute(context));
-		System.out.println(data);
-//		XmlDeserializer deserializer = XmlIOFactory.createFactory(
-//				ImportStone.class).createDeserializer();
-//		StringReader reader = new StringReader(data);
-//		deserializer.open(reader);
-		List<User> users = new ArrayList<User>();
-//		while (deserializer.hasNext()) {
-//			User p = deserializer.next();
-//			users.add(p);
-//			System.out.println(p.toString());
-//		}
-		return users;
+	public String insertNewUserData(User user) throws BaseXException {
+        String data = (new XQuery("for $doc in collection('Database')"
+                + " let $file-path := base-uri($doc)"
+                + " where ends-with($file-path, 'users.xml')"
+                + " return insert node <user>" +
+                "<username>" + user.getUsername() + "</username>" +
+                "<password>" + user.getPassword() + "</password>" +
+                "<uuid>" + user.getID() + "</uuid>" +
+                "</user> as last into //users").execute(context));
+
+        return data;
 	}
+
+
+
 }
