@@ -83,6 +83,10 @@ public class DatabaseService {
 		// Show information on the currently opened database
 		LOGGER.info("\n* Show database information:");
 
+        User user = new User();
+        user.setUsername("user2");
+        LOGGER.info(insertNewUserData(user));
+        LOGGER.info(getAllUsers());
 		LOGGER.info(new InfoDB().execute(context));
 
 	}
@@ -152,7 +156,4 @@ public class DatabaseService {
 
         return data;
 	}
-
-
-
 }
