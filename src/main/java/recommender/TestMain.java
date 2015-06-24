@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import CSV2XML.ImportStone;
+import model.RateableObject;
 import model.Rating;
+import model.Stone;
 import model.User;
 
 public class TestMain {
@@ -58,7 +59,7 @@ public class TestMain {
 			System.out.println("Unsere Empfehlungen fuer Benutzer " + user
 					+ ":");
 
-			List<StoneWrapper> recomms = rec.getRecommendations(user,
+			List<RateableObject> recomms = rec.getRecommendations(user,
 					neighbourhood_size, recommendations);
 			for (int i = 0; i < recomms.size(); i++) {
 				System.out.println((i + 1) + ". Empfehlung: "
@@ -73,39 +74,39 @@ public class TestMain {
 		List<Rating> ratings = new ArrayList<Rating>();
 
 		// user 1
-		ratings.add(new Rating(new User("user1", "pass", 1), new ImportStone(1,
+		ratings.add(new Rating(new User("user1", "pass", 1), new Stone(1,
 				"Stone 1"), 1));
-		ratings.add(new Rating(new User("user1", "pass", 1), new ImportStone(2,
+		ratings.add(new Rating(new User("user1", "pass", 1), new Stone(2,
 				"Stone 2"), 5));
-		ratings.add(new Rating(new User("user1", "pass", 1), new ImportStone(4,
+		ratings.add(new Rating(new User("user1", "pass", 1), new Stone(4,
 				"Stone 4"), 5));
 
 		// user 2
-		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(1,
+		ratings.add(new Rating(new User("user2", "pass", 2), new Stone(1,
 				"Stone 1"), 1));
-		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(2,
+		ratings.add(new Rating(new User("user2", "pass", 2), new Stone(2,
 				"Stone 2"), 5));
-		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(3,
+		ratings.add(new Rating(new User("user2", "pass", 2), new Stone(3,
 				"Stone 3"), 5));
-		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(4,
+		ratings.add(new Rating(new User("user2", "pass", 2), new Stone(4,
 				"Stone 4"), 5));
-		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(5,
+		ratings.add(new Rating(new User("user2", "pass", 2), new Stone(5,
 				"Stone 5"), 5));
-		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(6,
+		ratings.add(new Rating(new User("user2", "pass", 2), new Stone(6,
 				"Stone 6"), 5));
 
 		// user 3
-		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(1,
+		ratings.add(new Rating(new User("user3", "pass", 3), new Stone(1,
 				"Stone 1"), 1));
-		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(2,
+		ratings.add(new Rating(new User("user3", "pass", 3), new Stone(2,
 				"Stone 2"), 1));
-		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(3,
+		ratings.add(new Rating(new User("user3", "pass", 3), new Stone(3,
 				"Stone 3"), 5));
-		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(4,
+		ratings.add(new Rating(new User("user3", "pass", 3), new Stone(4,
 				"Stone 4"), 1));
-		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(5,
+		ratings.add(new Rating(new User("user3", "pass", 3), new Stone(5,
 				"Stone 5"), 1));
-		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(6,
+		ratings.add(new Rating(new User("user3", "pass", 3), new Stone(6,
 				"Stone 6"), 1));
 
 		return ratings;

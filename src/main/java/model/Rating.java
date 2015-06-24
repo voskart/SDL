@@ -12,10 +12,10 @@ import interfaces.IRateable;
 public class Rating {
 
 	private IId userId;
-	private IId objectId;
+	private IRateable objectId;
 	private int voting;
 
-	public Rating(IId user, IId stone, int rating) {
+	public Rating(IId user, IRateable stone, int rating) {
 		this.userId = user;
 		this.objectId = stone;
 		this.voting = rating;
@@ -29,11 +29,11 @@ public class Rating {
 		this.userId = user;
 	}
 
-	public IId getObject() {
+	public IRateable getObject() {
 		return objectId;
 	}
 
-	public void setObeject(IId object) {
+	public void setObeject(IRateable object) {
 		this.objectId = object;
 	}
 

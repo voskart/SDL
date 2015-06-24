@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import model.Stone;
 import model.User;
 
 import org.apache.log4j.Logger;
@@ -26,8 +27,6 @@ import org.jsefa.xml.XmlIOFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.ServletContextResource;
-
-import CSV2XML.ImportStone;
 
 @Service
 public class DatabaseService {
@@ -113,17 +112,17 @@ public class DatabaseService {
 	}
 
 	
-	public List<ImportStone> getAllStones() throws BaseXException {
+	public List<Stone> getAllStones() throws BaseXException {
 		String data = (new XQuery("for $doc in collection('Database')"
 				+ " let $file-path := base-uri($doc)"
 				+ " where ends-with($file-path, 'users.xml')"
 				+ " return //stones").execute(context));
-		XmlDeserializer deserializer = XmlIOFactory.createFactory(ImportStone.class).createDeserializer();
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(Stone.class).createDeserializer();
 		StringReader reader = new StringReader(data);
 		deserializer.open(reader);
-		List<ImportStone> stones = new ArrayList<ImportStone>();
+		List<Stone> stones = new ArrayList<Stone>();
 		while (deserializer.hasNext()) {
-		    ImportStone p = deserializer.next();
+		    Stone p = deserializer.next();
 		    stones.add(p);
 		    System.out.println(p.toString());
 		}

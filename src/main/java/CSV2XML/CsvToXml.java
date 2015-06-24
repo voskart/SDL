@@ -7,6 +7,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Stone;
+
 import org.jsefa.xml.XmlIOFactory;
 import org.jsefa.xml.XmlSerializer;
 import org.jsefa.xml.namespace.QName;
@@ -26,21 +28,21 @@ public class CsvToXml {
 		}
 
 		int userId = 0;
-    	List<ImportStone> list = new ArrayList<ImportStone>();
+    	List<Stone> list = new ArrayList<Stone>();
     	for (String[] s:str){
-        	ImportStone stone = ImportStone.create(s);
+        	Stone stone = Stone.create(s);
         	stone.setId(userId++);
         	list.add(stone);
     	}
     	
-    	XmlSerializer serializer = XmlIOFactory.createFactory(ImportStone.class).createSerializer();
+    	XmlSerializer serializer = XmlIOFactory.createFactory(Stone.class).createSerializer();
     	
     	StringWriter writer = new StringWriter();
     	serializer.open(writer);
     	serializer.getLowLevelSerializer().writeXmlDeclaration("1.0", "UTF-8");
     	serializer.getLowLevelSerializer().writeStartElement(QName.create("stones"));
     	// call serializer.write for every object to serialize
-    	for (ImportStone stone:list){
+    	for (Stone stone:list){
     		serializer.write(stone);
     	}
     	serializer.getLowLevelSerializer().writeEndElement();
