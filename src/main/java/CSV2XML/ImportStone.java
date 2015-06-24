@@ -1,5 +1,7 @@
 package CSV2XML;
 
+import interfaces.IId;
+
 import org.jsefa.csv.annotation.CsvDataType;
 import org.jsefa.csv.annotation.CsvField;
 import org.jsefa.xml.annotation.XmlDataType;
@@ -7,8 +9,8 @@ import org.jsefa.xml.annotation.XmlElement;
 
 @XmlDataType(defaultElementName = "stone")
 @CsvDataType()
-public class ImportStone {
-
+public class ImportStone implements IId{
+	
     @CsvField(pos = 1)
     @XmlElement(name = "InvNr1", pos = 1)
     String InvNr1;
@@ -109,6 +111,18 @@ public class ImportStone {
     @XmlElement(name = "Kommentar", pos = 25)
     String Kommentar;
     
+	@CsvField(pos = 26)
+    @XmlElement(name = "Id", pos = 26)
+    Integer id;
+    
+	@Override
+	public Integer getId() {
+		return this.id;
+	}
+	
+	public void setId(Integer id){
+		this.id = id;
+	}
     
     public static ImportStone create(String[] list){
     	ImportStone stone= new ImportStone();
@@ -146,5 +160,6 @@ public class ImportStone {
     
 	public ImportStone() {
 	}
+
 
 }

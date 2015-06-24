@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.Rating;
+
 public class TestMain {
 
 	public static void main(String[] args) {
@@ -54,7 +56,7 @@ public class TestMain {
 			System.out.println("Unsere Empfehlungen fuer Benutzer " + user
 					+ ":");
 
-			List<Stone> recomms = rec.getRecommendations(user,
+			List<StoneWrapper> recomms = rec.getRecommendations(user,
 					neighbourhood_size, recommendations);
 			for (int i = 0; i < recomms.size(); i++) {
 				System.out.println((i + 1) + ". Empfehlung: "
