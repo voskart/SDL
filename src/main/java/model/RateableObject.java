@@ -1,5 +1,6 @@
 package model;
 
+import interfaces.IId;
 import interfaces.IRateable;
 
 /**
@@ -7,7 +8,8 @@ import interfaces.IRateable;
  * @author benny
  * 
  */
-public class RateableObject implements IRateable, Comparable<RateableObject> {
+public class RateableObject implements IRateable, IId,
+		Comparable<RateableObject> {
 	private Integer id;
 	private Double predictedRating;
 	private String name;

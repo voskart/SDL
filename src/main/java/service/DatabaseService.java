@@ -89,10 +89,7 @@ public class DatabaseService {
 		xqc2.insertItem("users.xml", xqItem2, null);
 
 		xqe.executeCommand("SET WRITEBACK true");
-		//XQResultSequence rs = xqe.executeQuery("//users");
-		XQResultSequence rs = xqe.executeQuery("doc('xmlDB/users.xml')");
-		rs.writeSequence(System.out, null);
-		rs.close();
+		getAllStones();
 		xqc.close();
 
 		/*
@@ -135,6 +132,7 @@ public class DatabaseService {
 		 * 
 		 * LOGGER.info(new InfoDB().execute(context));
 		 */
+		getAllUsers();
 
 	}
 
