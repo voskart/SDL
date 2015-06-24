@@ -7,7 +7,5 @@ package interfaces;
  * 
  */
 public interface IRateable {
-	public Integer getId();
-
 	public Double getRating();
 }

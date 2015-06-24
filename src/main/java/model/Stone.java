@@ -1,5 +1,8 @@
 package model;
 
+import interfaces.IId;
+import interfaces.IRateable;
+
 import org.jsefa.csv.annotation.CsvDataType;
 import org.jsefa.csv.annotation.CsvField;
 import org.jsefa.xml.annotation.XmlDataType;
@@ -7,7 +10,7 @@ import org.jsefa.xml.annotation.XmlElement;
 
 @XmlDataType(defaultElementName = "stone")
 @CsvDataType()
-public class Stone extends RateableObject {
+public class Stone implements IRateable, IId{
 
 	@CsvField(pos = 1)
 	@XmlElement(name = "InvNr1", pos = 1)
@@ -116,12 +119,10 @@ public class Stone extends RateableObject {
 	// rating brauch keine Annotations
 	Double rating;
 
-	@Override
 	public Integer getId() {
 		return this.id;
 	}
 
-	@Override
 	public Double getRating() {
 		return this.rating;
 	}
@@ -165,7 +166,6 @@ public class Stone extends RateableObject {
 	}
 
 	public Stone() {
-		super();
 	}
 
 	/**
@@ -175,7 +175,6 @@ public class Stone extends RateableObject {
 	 * @param titel
 	 */
 	public Stone(Integer id, String titel) {
-		super();
 		this.id = id;
 		this.Titel = titel;
 	}

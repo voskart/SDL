@@ -87,6 +87,7 @@ public class DatabaseService {
 		LOGGER.info(new InfoDB().execute(context));
 		
 		getAllStones();
+		getAllUsers();
 
 	}
 
