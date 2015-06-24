@@ -61,6 +61,8 @@ public class DatabaseService {
 		addx.setInput(inputStream);
 		addx.execute(context);
 		
+		new Set("writeback", true).execute(context);
+		
 		new Optimize().execute(context);
 
 		ServletContextResource userResource = new ServletContextResource(
