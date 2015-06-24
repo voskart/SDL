@@ -1,6 +1,5 @@
 package controller;
 
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
@@ -31,16 +30,15 @@ public class RegistrationController {
     private static final Logger logger = Logger.getLogger(String.valueOf(RegistrationController.class));
 
     @RequestMapping(method = RequestMethod.POST)
-    public String printWelcome(HttpServletRequest req, ModelMap model) {
+    public String printWelcome(HttpServletRequest req, ModelMap model) throws BaseXException {
         logger.info("Successfully submitted registration form");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        // We now generate a unique identifier for the user
-        UUID uuid = UUID.randomUUID();
+        String passwordHash = LoginController.encryptPassword(password);
         // Create the user-object if needed
-        
-        // FIXME ARTE: ID als Integer
-        User user = new User(username, password, Integer.parseInt(uuid.toString()));
+        Integer newID = dbservice.getLastUserID();
+
+        User user = new User(username, passwordHash, newID + 1);
         // Save user to XML-file
         saveUser(user);
         // Redirect user to needed page, you can also pass the user-object once again

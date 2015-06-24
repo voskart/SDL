@@ -81,9 +81,7 @@ public class DatabaseService {
 		// Show information on the currently opened database
 		LOGGER.info("\n* Show database information:");
 
-        User user = new User();
-        user.setUsername("user2");
-        LOGGER.info(insertNewUserData(user));
+        LOGGER.info(getLastUserID() + " LAST USER ID");
         LOGGER.info(getAllUsers());
 		LOGGER.info(new InfoDB().execute(context));
 
@@ -133,7 +131,7 @@ public class DatabaseService {
         String data = (new XQuery("for $doc in collection('Database')"
                 + " let $file-path := base-uri($doc)"
                 + " where ends-with($file-path, 'users.xml')"
-                + " return data(//users/user/username)").execute(context));
+                + " return data(//users/user/uuid)").execute(context));
 
         // If more values needed: return concat data(//users/user/username) + ' ' + data(//users/user/uuid)
         String userArray[] = data.split("\\r?\\n");
@@ -154,4 +152,13 @@ public class DatabaseService {
 
         return data;
 	}
+
+    public Integer getLastUserID() throws BaseXException {
+
+        String data = (new XQuery("for $doc in collection('Database')"
+                + " let $file-path := base-uri($doc)"
+                + " where ends-with($file-path, 'users.xml')"
+                + " return data((//users/user/uuid)[last()])").execute(context));
+        return Integer.parseInt(data);
+    }
 }

@@ -23,11 +23,10 @@
             <h1 class="text-center login-title">Sign in to continue to SDL</h1>
             <div class="account-wall">
                 <form action="login" method="POST">
-                    <input type="text" name="username" class="form-control" placeholder="username" required autofocus>
+                    <input type="text" name="username" class="form-control" placeholder="username" required>
                     <input type="password" name="password" class="form-control" placeholder="password" required>
                     <br>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">
-                        Sign in</button>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
                 </form>
             </div>
             <a href="/registration" class="text-center new-account">Create an account </a>
