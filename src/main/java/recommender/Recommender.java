@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import model.Rating;
+
 /**
  * Diese Klasse repräsentiert einen Recommender, die die Ähnlicjkeit von
  * Benutzern ausrechnet und auf dieser Grundlage Vorschläge für Steinen
@@ -197,7 +199,7 @@ public class Recommender {
 	// Liste und sortiert diese nach den addierten Bewertungen und gibt dann die
 	// Anzahl
 	// angegebener Empfehlungen zurÃ¼ck.
-	public List<Stone> getRecommendations(int userId, int neighbourSize,
+	public List<StoneWrapper> getRecommendations(int userId, int neighbourSize,
 			int recommendations) {
 		List<Neighbour> neighbours = getOrderedNeighbours(userId, neighbourSize);
 
@@ -211,10 +213,10 @@ public class Recommender {
 		// Berechne zu jedem Stone die voraussichtliche Bewertung des Benutzers.
 		// Nehme diese Liste, um eine
 		// Empfehlung auszusprechen.
-		ArrayList<Stone> stones = new ArrayList<Stone>();
-		for (int movie = 0; movie < ARRAYSIZE; movie++) {
-			if (users_stones[userId][movie] == 0) {
-				stones.add(new Stone(movie, getPrediction(userId, movie,
+		ArrayList<StoneWrapper> stones = new ArrayList<StoneWrapper>();
+		for (int stoneCounter = 0; stoneCounter < ARRAYSIZE; stoneCounter++) {
+			if (users_stones[userId][stoneCounter] == 0) {
+				stones.add(new StoneWrapper(stoneCounter, getPrediction(userId, stoneCounter,
 						neighbours)));
 			}
 		}
@@ -223,8 +225,8 @@ public class Recommender {
 		// auf den Index zu verlieren
 		Collections.sort(stones);
 
-		List<Stone> retList = new ArrayList<Stone>();
-		Stone tempStone = null;
+		List<StoneWrapper> retList = new ArrayList<StoneWrapper>();
+		StoneWrapper tempStone = null;
 		for (int i = 0; i < recommendations; i++) {
 			tempStone = stones.get(i);
 			tempStone.setName(stoneNames.get(tempStone.getId()));

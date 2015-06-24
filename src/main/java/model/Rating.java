@@ -1,4 +1,4 @@
-package recommender;
+package model;
 
 /**
  * Diese Klasse repräsentiert ein User-Rating.

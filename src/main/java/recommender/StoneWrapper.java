@@ -5,13 +5,13 @@ package recommender;
  * @author benny
  *
  */
-public class Stone implements Comparable<Stone> {
+public class StoneWrapper implements Comparable<StoneWrapper> {
 
 	private int id;
 	private double predictedRating;
 	private String name;
 
-	Stone(int index, double total_ratings) {
+	StoneWrapper(int index, double total_ratings) {
 		this.id = index;
 		this.predictedRating = total_ratings;
 	}
@@ -33,7 +33,7 @@ public class Stone implements Comparable<Stone> {
 	}
 
 	@Override
-	public int compareTo(Stone o) {
+	public int compareTo(StoneWrapper o) {
 		return Double.compare(o.getRatings(), this.predictedRating);
 	}
 

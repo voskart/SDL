@@ -11,7 +11,6 @@ import javax.servlet.ServletContext;
 import model.User;
 
 import org.apache.log4j.Logger;
-import org.apache.tomcat.util.descriptor.web.ContextHandler;
 import org.basex.core.BaseXException;
 import org.basex.core.Context;
 import org.basex.core.cmd.Add;
@@ -60,7 +59,7 @@ public class DatabaseService {
 		Add addx = new Add("outpput.xml");
 		addx.setInput(inputStream);
 		addx.execute(context);
-		
+
 		new Optimize().execute(context);
 
 		ServletContextResource userResource = new ServletContextResource(
@@ -75,14 +74,17 @@ public class DatabaseService {
 		Add add = new Add("users.xml");
 		add.setInput(inputStreamUsers);
 		add.execute(context);
-		
+
 		new Optimize().execute(context);
-		
+
 		// Show information on the currently opened database
 		LOGGER.info("\n* Show database information:");
 
-//		LOGGER.info(getUserPasswordHash("user1"));
+		// LOGGER.info(getUserPasswordHash("user1"));
 		LOGGER.info(new InfoDB().execute(context));
+
+		getAllStones();
+		getAllUsers();
 	}
 
 	public void closeBasexDatabase() throws BaseXException {
@@ -97,36 +99,64 @@ public class DatabaseService {
 	}
 
 	public String getUserPasswordHash(String username) throws BaseXException {
-		String getUserPasswordHashResult = new XQuery("for $doc in collection('Database')"
-				+ " let $file-path := base-uri($doc)"
-				+ " where ends-with($file-path, 'users.xml')"
-				+ " return data(//users/user[username eq '" + username
-				+ "']/password)").execute(context);
-		LOGGER.info("### getUserPasswordHashResult: " + getUserPasswordHashResult);
+		String getUserPasswordHashResult = new XQuery(
+				"for $doc in collection('Database')"
+						+ " let $file-path := base-uri($doc)"
+						+ " where ends-with($file-path, 'users.xml')"
+						+ " return data(//users/user[username eq '" + username
+						+ "']/password)").execute(context);
+		LOGGER.info("### getUserPasswordHashResult: "
+				+ getUserPasswordHashResult);
 		return getUserPasswordHashResult;
 	}
 
-	
 	public List<ImportStone> getAllStones() throws BaseXException {
 		String data = (new XQuery("for $doc in collection('Database')"
 				+ " let $file-path := base-uri($doc)"
 				+ " where ends-with($file-path, 'users.xml')"
 				+ " return //stones").execute(context));
-		XmlDeserializer deserializer = XmlIOFactory.createFactory(ImportStone.class).createDeserializer();
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(
+				ImportStone.class).createDeserializer();
 		StringReader reader = new StringReader(data);
 		deserializer.open(reader);
-		List<ImportStone> stones = new ArrayList();
+		List<ImportStone> stones = new ArrayList<ImportStone>();
 		while (deserializer.hasNext()) {
-		    ImportStone p = deserializer.next();
-		    stones.add(p);
-		    System.out.println(p.toString());
+			ImportStone p = deserializer.next();
+			stones.add(p);
 		}
 		return stones;
-		
-	}
-	
-	public void insertNewUserData(User user) {
-		// TODO
+
 	}
 
+	public void insertNewUserData(User user) throws BaseXException {
+		String username = user.getUsername();
+		String passHash = user.getPassword();
+		String id = user.getID();
+		
+		String insertQuery = "insert node <user>"
+				+ "<username>" + username + "</username>"
+				+ "<password>" + passHash + "</password>"
+				+ "<uuid>" + id + "</uuid>"
+				+ "</user>";
+		new XQuery(insertQuery).execute(context);
+	}
+	
+	public List<User> getAllUsers() throws BaseXException{
+		String data = (new XQuery("for $doc in collection('Database')"
+				+ " let $file-path := base-uri($doc)"
+				+ " where ends-with($file-path, 'users.xml')"
+				+ " return (for $x in /users/user return $x)").execute(context));
+		System.out.println(data);
+//		XmlDeserializer deserializer = XmlIOFactory.createFactory(
+//				ImportStone.class).createDeserializer();
+//		StringReader reader = new StringReader(data);
+//		deserializer.open(reader);
+		List<User> users = new ArrayList<User>();
+//		while (deserializer.hasNext()) {
+//			User p = deserializer.next();
+//			users.add(p);
+//			System.out.println(p.toString());
+//		}
+		return users;
+	}
 }
