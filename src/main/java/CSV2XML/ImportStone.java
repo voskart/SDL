@@ -155,10 +155,15 @@ public class ImportStone implements IId{
     }
 
     public String toString(){
-    	return "ID: "+this.InvNr1+", Link: "+this.Link;
+    	return "ID: "+this.id+", Link: "+this.Link;
     }
     
 	public ImportStone() {
+	}
+	
+	public ImportStone(Integer id, String titel) {
+		this.id = id;
+		this.Titel = titel;
 	}
 
 

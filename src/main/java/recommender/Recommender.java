@@ -20,8 +20,8 @@ public class Recommender {
 
 	// Matrix, welche die Ratings enth�lt (users_movies[userId][movieId] =
 	// rating)
-	private int users_stones[][] = null;
-	private double users_users[][] = null;
+	private Integer usersStones[][] = null;
+	private double usersUsers[][] = null;
 
 	private Map<Integer, String> stoneNames;
 
@@ -41,8 +41,8 @@ public class Recommender {
 	 * Initialisiert die Matrizen auf denen die Berechnungen stattfinden.
 	 */
 	private void initializeMatrixes() {
-		users_stones = new int[Recommender.ARRAYSIZE][Recommender.ARRAYSIZE];
-		users_users = new double[Recommender.ARRAYSIZE][Recommender.ARRAYSIZE];
+		usersStones = new Integer[Recommender.ARRAYSIZE][Recommender.ARRAYSIZE];
+		usersUsers = new double[Recommender.ARRAYSIZE][Recommender.ARRAYSIZE];
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class Recommender {
 	 */
 	private void importRatings(List<Rating> ratings) {
 		for (Rating r : ratings) {
-			users_stones[r.getUserId()][r.getStoneId()] = r.getVoting();
+			usersStones[r.getUser().getId()][r.getObject().getId()] = r.getVoting();
 		}
 	}
 
@@ -68,8 +68,8 @@ public class Recommender {
 		int numberOfVotes = 0;
 		int absolut = 0;
 		for (int i = 0; i < ARRAYSIZE; i++) {
-			if (users_stones[userId][i] > 0) {
-				absolut = absolut + users_stones[userId][i];
+			if (usersStones[userId][i] != null && usersStones[userId][i] > 0) {
+				absolut = absolut + usersStones[userId][i];
 				numberOfVotes++;
 			}
 		}
@@ -114,8 +114,8 @@ public class Recommender {
 					// folgende Code ausgeführt und die Zähler und Nenner
 					// berechnet.
 					for (int item = 0; item < intersection.size(); item++) {
-						voteUserA = users_stones[userA][intersection.get(item)];
-						voteUserB = users_stones[userB][intersection.get(item)];
+						voteUserA = usersStones[userA][intersection.get(item)];
+						voteUserB = usersStones[userB][intersection.get(item)];
 
 						zaehler = zaehler
 								+ ((voteUserA - meanUserA) * (voteUserB - meanUserB));
@@ -131,14 +131,14 @@ public class Recommender {
 					// die genau dieselben Wertungen abgeben haben sim=0
 					// TODO: Wie wird mit solchen Usern umgegangen?
 					if ((zaehler == 0) || (nenner1 == 0) || (nenner2 == 0)) {
-						users_users[userA][userB] = 0;
+						usersUsers[userA][userB] = 0;
 					} else {
-						users_users[userA][userB] = (zaehler / ((Math
+						usersUsers[userA][userB] = (zaehler / ((Math
 								.sqrt(nenner1) * Math.sqrt(nenner2))));
 					}
 
 				} else {
-					users_users[userA][userB] = -99;
+					usersUsers[userA][userB] = -99;
 				}
 
 			}
@@ -156,7 +156,7 @@ public class Recommender {
 			// Wenn
 			// beide dort ein Voting abgegeben haben, kommt der Film in die
 			// Schnittmenge
-			if ((users_stones[userA][i] != 0) && (users_stones[userB][i] != 0)) {
+			if ((usersStones[userA][i] != null) && (usersStones[userB][i] != null)) {
 				intersection.add(i);
 			}
 		}
@@ -164,7 +164,7 @@ public class Recommender {
 	}
 
 	public double getSimBetween(int userA, int userB) {
-		return users_users[userA][userB];
+		return usersUsers[userA][userB];
 	}
 
 	// Diese Funktion Erzeugt eine Liste aller User, die einen Ähnlichkeitswert
@@ -179,8 +179,8 @@ public class Recommender {
 			// Überspringt den Eintrag, bei dem der User mit sich selbst
 			// vergleichen wurde.
 			if (i != user) {
-				if (users_users[user][i] != -99) {
-					neighbours.add(new Neighbour(i, users_users[user][i],
+				if (usersUsers[user][i] != -99) {
+					neighbours.add(new Neighbour(i, usersUsers[user][i],
 							getIntersectionOf(user, i).size()));
 				}
 			}
@@ -215,7 +215,7 @@ public class Recommender {
 		// Empfehlung auszusprechen.
 		ArrayList<StoneWrapper> stones = new ArrayList<StoneWrapper>();
 		for (int stoneCounter = 0; stoneCounter < ARRAYSIZE; stoneCounter++) {
-			if (users_stones[userId][stoneCounter] == 0) {
+			if (usersStones[userId][stoneCounter] == null) {
 				stones.add(new StoneWrapper(stoneCounter, getPrediction(userId, stoneCounter,
 						neighbours)));
 			}
@@ -254,10 +254,10 @@ public class Recommender {
 		int neighbour_index;
 		for (int i = 0; i < neighbours.size(); i++) {
 			neighbour_index = neighbours.get(i).getIndex();
-			if ((users_stones[neighbour_index][stoneId] > 0)) {
+			if (usersStones[neighbour_index][stoneId] != null && usersStones[neighbour_index][stoneId] > 0) {
 				zaehler = zaehler
-						+ (users_stones[neighbour_index][stoneId] * users_users[userId][neighbour_index]);
-				nenner = nenner + (users_users[userId][neighbour_index]);
+						+ (usersStones[neighbour_index][stoneId] * usersUsers[userId][neighbour_index]);
+				nenner = nenner + (usersUsers[userId][neighbour_index]);
 			}
 		}
 

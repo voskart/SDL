@@ -84,6 +84,8 @@ public class DatabaseService {
         LOGGER.info(getLastUserID() + " LAST USER ID");
         LOGGER.info(getAllUsers());
 		LOGGER.info(new InfoDB().execute(context));
+		
+		getAllStones();
 
 	}
 

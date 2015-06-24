@@ -1,23 +1,11 @@
 package CSV2XML;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
-
 
 import org.jsefa.xml.XmlIOFactory;
 import org.jsefa.xml.XmlSerializer;
@@ -37,9 +25,11 @@ public class CsvToXml {
 			e1.printStackTrace();
 		}
 
+		int userId = 0;
     	List<ImportStone> list = new ArrayList<ImportStone>();
     	for (String[] s:str){
         	ImportStone stone = ImportStone.create(s);
+        	stone.setId(userId++);
         	list.add(stone);
     	}
     	
@@ -47,7 +37,7 @@ public class CsvToXml {
     	
     	StringWriter writer = new StringWriter();
     	serializer.open(writer);
-    	serializer.getLowLevelSerializer().writeXmlDeclaration("1.0", "ISO-8859-1");
+    	serializer.getLowLevelSerializer().writeXmlDeclaration("1.0", "UTF-8");
     	serializer.getLowLevelSerializer().writeStartElement(QName.create("stones"));
     	// call serializer.write for every object to serialize
     	for (ImportStone stone:list){
@@ -57,7 +47,7 @@ public class CsvToXml {
     	serializer.close(true);
     	
     	try {
-        	FileWriter fw = new FileWriter("./outpput.xml");
+        	FileWriter fw = new FileWriter("./outpput_test.xml");
 			fw.write(writer.toString());
         	fw.close();
         	writer.close();

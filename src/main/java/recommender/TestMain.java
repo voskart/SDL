@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import CSV2XML.ImportStone;
 import model.Rating;
+import model.User;
 
 public class TestMain {
 
@@ -71,25 +73,40 @@ public class TestMain {
 		List<Rating> ratings = new ArrayList<Rating>();
 
 		// user 1
-		ratings.add(new Rating(1, 1, 1));
-		ratings.add(new Rating(1, 2, 5));
-		ratings.add(new Rating(1, 4, 5));
+		ratings.add(new Rating(new User("user1", "pass", 1), new ImportStone(1,
+				"Stone 1"), 1));
+		ratings.add(new Rating(new User("user1", "pass", 1), new ImportStone(2,
+				"Stone 2"), 5));
+		ratings.add(new Rating(new User("user1", "pass", 1), new ImportStone(4,
+				"Stone 4"), 5));
 
 		// user 2
-		ratings.add(new Rating(2, 1, 1));
-		ratings.add(new Rating(2, 2, 5));
-		ratings.add(new Rating(2, 3, 5));
-		ratings.add(new Rating(2, 4, 5));
-		ratings.add(new Rating(2, 5, 5));
-		ratings.add(new Rating(2, 6, 5));
+		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(1,
+				"Stone 1"), 1));
+		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(2,
+				"Stone 2"), 5));
+		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(3,
+				"Stone 3"), 5));
+		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(4,
+				"Stone 4"), 5));
+		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(5,
+				"Stone 5"), 5));
+		ratings.add(new Rating(new User("user2", "pass", 2), new ImportStone(6,
+				"Stone 6"), 5));
 
 		// user 3
-		ratings.add(new Rating(3, 1, 1));
-		ratings.add(new Rating(3, 2, 1));
-		ratings.add(new Rating(3, 3, 5));
-		ratings.add(new Rating(3, 4, 1));
-		ratings.add(new Rating(3, 5, 1));
-		ratings.add(new Rating(3, 6, 1));
+		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(1,
+				"Stone 1"), 1));
+		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(2,
+				"Stone 2"), 1));
+		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(3,
+				"Stone 3"), 5));
+		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(4,
+				"Stone 4"), 1));
+		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(5,
+				"Stone 5"), 1));
+		ratings.add(new Rating(new User("user3", "pass", 3), new ImportStone(6,
+				"Stone 6"), 1));
 
 		return ratings;
 	}
