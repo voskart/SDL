@@ -109,7 +109,6 @@ public class Stone extends RateableObject {
 	@XmlElement(name = "Kommentar", pos = 25)
 	String Kommentar;
 
-	@CsvField(pos = 26)
 	@XmlElement(name = "Id", pos = 26)
 	Integer id;
 

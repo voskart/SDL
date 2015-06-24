@@ -1,5 +1,7 @@
 package controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,13 @@ public class DatabaseController {
 	public String stopDB() throws Exception{
 		log.info("Stop DB");
 		dbService.closeBasexDatabase();
+        return ("hello");
+	}
+	
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	public String exportDB(HttpServletRequest request) throws Exception{
+		log.info("Export DB to"+request.getParameter("path"));
+		dbService.exportData(request.getParameter("path"));
         return ("hello");
 	}
 	

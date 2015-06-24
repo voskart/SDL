@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +10,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.xquery.XQException;
 
 import model.User;
 
@@ -39,7 +41,7 @@ public class LoginController {
     @RequestMapping(method = RequestMethod.POST)
     public String login(
             HttpServletRequest req, HttpServletResponse resp,
-            ModelMap model) {
+            ModelMap model) throws XQException, IOException {
 
         logger.info("Successfully logged in");
         String username = req.getParameter("username");
@@ -110,7 +112,7 @@ public class LoginController {
         return result;
     }
 
-    private boolean validateUserInXMLDB(User user) throws BaseXException {
+    private boolean validateUserInXMLDB(User user) throws XQException, IOException {
 
         // Get the dbservice instance
         // DatabaseService dbservice = new DatabaseService();

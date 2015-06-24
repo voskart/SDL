@@ -1,9 +1,11 @@
 package controller;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.xquery.XQException;
 
 import model.User;
 
@@ -30,7 +32,7 @@ public class RegistrationController {
     private static final Logger logger = Logger.getLogger(String.valueOf(RegistrationController.class));
 
     @RequestMapping(method = RequestMethod.POST)
-    public String printWelcome(HttpServletRequest req, ModelMap model) throws BaseXException {
+    public String printWelcome(HttpServletRequest req, ModelMap model) throws XQException, IOException {
         logger.info("Successfully submitted registration form");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -43,10 +45,14 @@ public class RegistrationController {
         saveUser(user);
         // Redirect user to needed page, you can also pass the user-object once again
         model.addAttribute(model.addAttribute("username", username));
+        for (String u: dbservice.getAllUsers()){
+        	logger.info("User: "+u+"\n");
+        }
+        
         return "HotOrNot";
     }
     
-    private void saveUser(User user){
+    private void saveUser(User user) throws XQException, IOException{
     	try {
 			this.dbservice.insertNewUserData(user);
 		} catch (BaseXException e) {
