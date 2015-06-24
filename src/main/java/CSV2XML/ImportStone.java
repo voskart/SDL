@@ -160,6 +160,11 @@ public class ImportStone implements IId{
     
 	public ImportStone() {
 	}
+	
+	public ImportStone(Integer id, String titel) {
+		this.id = id;
+		this.Titel = titel;
+	}
 
 
 }
