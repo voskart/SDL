@@ -45,7 +45,7 @@ public class RegistrationController {
         saveUser(user);
         // Redirect user to needed page, you can also pass the user-object once again
         model.addAttribute(model.addAttribute("username", username));
-        for (String u: dbservice.getAllUsers()){
+        for (User u: dbservice.getAllUsers()){
         	logger.info("User: "+u+"\n");
         }
         

@@ -89,9 +89,9 @@ public class DatabaseService {
 		xqc2.insertItem("users.xml", xqItem2, null);
 
 		xqe.executeCommand("SET WRITEBACK true");
+        getAllUsers();
 		getAllStones();
 		xqc.close();
-
 
 	}
 
@@ -135,17 +135,24 @@ public class DatabaseService {
 	}
 
 	// Returns all the usernames in a list (all usernames in form of a list)
-	public List<String> getAllUsers() throws XQException, IOException {
+	public List<User> getAllUsers() throws XQException, IOException {
 
 		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
-		data = session.execute("xquery data(//users/user/uuid)");
-		String userArray[] = data.split("\\r?\\n");
-		// Convert to an ArrayList just for Benny <3
-		List<String> userList = Arrays.asList(userArray);
+		data = session.execute("xquery //users");
+        XmlDeserializer deserializer = XmlIOFactory.createFactory(User.class)
+                .createDeserializer();
+        StringReader reader = new StringReader(data);
+        deserializer.open(reader);
+        List<User> users = new ArrayList<User>();
+        while (deserializer.hasNext()) {
+            User u = deserializer.next();
+            users.add(u);
+            System.out.println(u.toString());
+        }
 		session.close();
-		return userList;
+		return users;
 	}
 
 	public String insertNewUserData(User user) throws XQException, IOException {
