@@ -1,10 +1,6 @@
 package service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +34,7 @@ import org.basex.core.cmd.XQuery;
 import org.basex.server.ClientSession;
 import org.jsefa.xml.XmlDeserializer;
 import org.jsefa.xml.XmlIOFactory;
+import org.jsefa.xml.XmlSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.ServletContextResource;
@@ -89,6 +86,9 @@ public class DatabaseService {
 		xqc2.insertItem("users.xml", xqItem2, null);
 
 		xqe.executeCommand("SET WRITEBACK true");
+
+        User user = new User("hallo", "bla", 111);
+        insertNewUserData(user);
         getAllUsers();
 		getAllStones();
 		xqc.close();
@@ -160,8 +160,21 @@ public class DatabaseService {
 		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
-		System.out.println(session.execute("info"));	
-		data = session.execute("xquery let $up :=  <user>" + "<username>"
+//		System.out.println(session.execute("info"));
+//        XmlSerializer serializer = XmlIOFactory.createFactory(User.class).createSerializer();
+//        StringWriter writer = new StringWriter();
+//        serializer.open(writer);
+//        serializer.write(user);
+//        serializer.close(true);
+//        String userXML = writer.toString();
+//        writer.close();
+//        System.out.println(userXML);
+//        data = session.execute("xquery let $up := <user>\n" +
+//                "  <username>hallo</username>\n" +
+//                "  <password>bla</password>\n" +
+//                "  <uuid>111</uuid>\n" +
+//                "</user> return insert node $up as last into /users");
+        data = session.execute("xquery let $up :=  <user>" + "<username>"
 						+ user.getUsername() + "</username>" + "<password>"
 						+ user.getPassword() + "</password>" + "<uuid>" + user.getId()
 						+ "</uuid>" + "</user> return insert node $up as last into /users");
