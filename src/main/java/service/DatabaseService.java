@@ -87,10 +87,6 @@ public class DatabaseService {
 
 		xqe.executeCommand("SET WRITEBACK true");
 
-        User user = new User("hallo", "bla", 111);
-        insertNewUserData(user);
-        getAllUsers();
-		getAllStones();
 		xqc.close();
 
 	}
@@ -132,6 +128,23 @@ public class DatabaseService {
 			System.out.println(p.toString());
 		}
 		return stones;
+	}
+
+	public Stone getStonebyId(Integer id) throws XQException, IOException {
+		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+		String data = session.execute("open xmlDB");
+		session.execute("SET WRITEBACK TRUE");
+		data = session.execute("xquery //stones/stone[Id='"+id+"']");
+		session.close();
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(Stone.class)
+				.createDeserializer();
+		StringReader reader = new StringReader(data);
+		deserializer.open(reader);
+		List<Stone> stones = new ArrayList<Stone>();
+		if(deserializer.hasNext()){
+		Stone p = deserializer.next();
+		return p;
+		} else {return null;}
 	}
 
 	// Returns all the usernames in a list (all usernames in form of a list)
