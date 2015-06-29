@@ -1,7 +1,5 @@
 package model;
 
-import interfaces.IId;
-import interfaces.IRateable;
 
 /**
  * Diese Klasse repräsentiert ein User-Rating.
@@ -11,29 +9,29 @@ import interfaces.IRateable;
  */
 public class Rating {
 
-	private IId userId;
-	private RateableObject objectId;
+	private Integer userId;
+	private Integer objectId;
 	private int voting;
 
-	public Rating(IId user, RateableObject stone, int rating) {
+	public Rating(Integer user, Integer stone, int rating) {
 		this.userId = user;
 		this.objectId = stone;
 		this.voting = rating;
 	}
 
-	public IId getUser() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(IId user) {
+	public void setUserId(Integer user) {
 		this.userId = user;
 	}
 
-	public RateableObject getObject() {
+	public Integer getStoneId() {
 		return objectId;
 	}
 
-	public void setObeject(RateableObject object) {
+	public void setStoneId(Integer object) {
 		this.objectId = object;
 	}
 

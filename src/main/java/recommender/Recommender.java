@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import model.RateableObject;
 import model.Rating;
 
 /**
@@ -55,7 +54,7 @@ public class Recommender {
 	 */
 	private void importRatings(List<Rating> ratings) {
 		for (Rating r : ratings) {
-			usersStones[r.getUser().getId()][r.getObject().getId()] = r
+			usersStones[r.getUserId()][r.getStoneId()] = r
 					.getVoting();
 		}
 	}
@@ -197,7 +196,7 @@ public class Recommender {
 	 * @param recommendations
 	 * @return
 	 */
-	public List<RateableObject> getRecommendations(int userId, int neighbourSize,
+	public List<Integer> getRecommendations(int userId, int neighbourSize,
 			int recommendations) {
 		List<Neighbour> neighbours = getOrderedNeighbours(userId, neighbourSize);
 		neighbourSize = neighbours.size();
@@ -205,10 +204,10 @@ public class Recommender {
 		// Berechne zu jedem Stone die voraussichtliche Bewertung des Benutzers.
 		// Nehme diese Liste, um eine
 		// Empfehlung auszusprechen.
-		ArrayList<RateableObject> stones = new ArrayList<RateableObject>();
+		ArrayList<Prediction> stones = new ArrayList<Prediction>();
 		for (int stoneCounter = 0; stoneCounter < ARRAYSIZE; stoneCounter++) {
 			if (usersStones[userId][stoneCounter] == null) {
-				stones.add(new RateableObject(stoneCounter, getPrediction(userId,
+				stones.add(new Prediction(stoneCounter, getPrediction(userId,
 						stoneCounter, neighbours)));
 			}
 		}
@@ -217,15 +216,15 @@ public class Recommender {
 		// auf den Index zu verlieren
 		Collections.sort(stones);
 
-		List<RateableObject> retList = new ArrayList<RateableObject>();
-		RateableObject tempStone = null;
+		List<Integer> retList = new ArrayList<Integer>();
+		Integer tempStone = null;
 		for (int i = 0; i < recommendations; i++) {
-			tempStone = stones.get(i);
-			tempStone.setName(stoneNames.get(tempStone.getId()));
-			retList.add(tempStone);
+			retList.add(stones.get(i).stoneId);
 		}
 		return retList;
 	}
+	
+	
 
 	/**
 	 * 
@@ -259,6 +258,21 @@ public class Recommender {
 			return 0;
 		} else {
 			return Math.round(zaehler / nenner);
+		}
+	}
+	
+	private class Prediction implements Comparable<Prediction> {
+		private Integer stoneId;
+		private double predictionRate;
+		
+		public Prediction(Integer stoneId, double d){
+			this.stoneId = stoneId;
+			this.predictionRate = d;
+		}
+		
+		@Override
+		public int compareTo(Prediction o) {
+			return Double.compare(o.predictionRate, this.predictionRate);
 		}
 	}
 
