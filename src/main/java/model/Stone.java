@@ -163,6 +163,108 @@ public class Stone implements IRateable, IId{
 	public String toString() {
 		return "ID: " + this.id + ", Link: " + this.Link;
 	}
+	
+	
+
+	public String getInvNr1() {
+		return InvNr1;
+	}
+
+	public String getMusId() {
+		return MusId;
+	}
+
+	public String getLink() {
+		return Link;
+	}
+
+	public String getInvNr2() {
+		return InvNr2;
+	}
+
+	public String getBild() {
+		return Bild;
+	}
+
+	public String getTitel() {
+		return Titel;
+	}
+
+	public String getMasze() {
+		return Masze;
+	}
+
+	public String getHoehe() {
+		return Hoehe;
+	}
+
+	public String getBreite() {
+		return Breite;
+	}
+
+	public String getTiefe() {
+		return Tiefe;
+	}
+
+	public String getUnit() {
+		return Unit;
+	}
+
+	public String getMaterial() {
+		return Material;
+	}
+
+	public String getMaterialId() {
+		return MaterialId;
+	}
+
+	public String getDatierung() {
+		return Datierung;
+	}
+
+	public String getErdzeitalter() {
+		return Erdzeitalter;
+	}
+
+	public String getErdzeitalterId() {
+		return ErdzeitalterId;
+	}
+
+	public String getHerkunft() {
+		return Herkunft;
+	}
+
+	public String getHerkunftCoord() {
+		return HerkunftCoord;
+	}
+
+	public String getHerkunftId() {
+		return HerkunftId;
+	}
+
+	public String getHerkunftGeoId() {
+		return HerkunftGeoId;
+	}
+
+	public String getFundort() {
+		return Fundort;
+	}
+
+	public String getFundortCoord() {
+		return FundortCoord;
+	}
+
+	public String getFundortId() {
+		return FundortId;
+	}
+
+	public String getFundortGeoId() {
+		return FundortGeoId;
+	}
+
+	public String getKommentar() {
+		return Kommentar;
+	}
 
 	public Stone() {
 	}
