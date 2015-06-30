@@ -1,9 +1,19 @@
 package controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import model.Coordinates;
 import model.Data;
 import model.Stone;
+import org.apache.jena.atlas.json.JsonObject;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import service.DatabaseService;
+import service.JsonService;
 import service.WikidataService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -89,9 +99,34 @@ public class HotOrNotController {
 
 		return "HotOrNot";
 	}
-	
-	private static final String IMAGE_URL_PREFIX = "https://commons.wikimedia.org/wiki/Category:Geologische_Sammlung_(Stadtmuseum_Berlin)#/media/File:";
-	
+
+
+
+    private static final String IMAGE_URL_PREFIX = "https://en.wikipedia.org/w/api.php?action=query&prop=imageinfo&format=json&iiprop=url&titles=File:";
+
+    class JsonURLClass{
+        String url;
+    }
+
+    private static String getURL(String imageName) throws ParseException {
+
+        JsonService jsonService = new JsonService();
+        try {
+            String jsonString = jsonService.readJsonFromUrl(IMAGE_URL_PREFIX + imageName);
+            JSONObject json = (JSONObject)new JSONParser().parse(jsonString);
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode node = mapper.readTree(jsonString);
+            ArrayNode arrayNode = (ArrayNode) node.get("imageinfo");
+            System.out.println(arrayNode);
+            List<JsonURLClass> urls = mapper.readValue(arrayNode.toString(), new TypeReference<List<JsonURLClass>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 	private void fillModel(ModelMap model, Stone stone) {
 		model.addAttribute("id", stone.getId());
 		model.addAttribute("info", "ID: " + stone.getId() + ") " + stone.getKommentar());
