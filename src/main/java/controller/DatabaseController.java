@@ -1,5 +1,6 @@
 package controller;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ public class DatabaseController {
 	private DatabaseService dbService;
     private static final Logger log = Logger.getLogger(String.valueOf(DatabaseController.class));
 	
-
+    @PostConstruct
 	@RequestMapping(value = "/start", method = RequestMethod.GET)
 	public String startDB() throws Exception{
 		log.info("Start DB");
