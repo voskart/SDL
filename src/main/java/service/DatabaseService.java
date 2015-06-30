@@ -136,7 +136,7 @@ public class DatabaseService {
 		while (deserializer.hasNext()) {
 			Stone p = deserializer.next();
 			stones.add(p);
-			System.out.println(p.toString());
+//			System.out.println(p.toString());
 		}
 		return stones;
 	}

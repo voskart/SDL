@@ -1,34 +1,34 @@
 package controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import model.Coordinates;
-import model.Data;
-import model.Stone;
-import org.apache.jena.atlas.json.JsonObject;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import service.DatabaseService;
-import service.JsonService;
-import service.WikidataService;
+import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.xquery.XQException;
 
+import model.Stone;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jettison.json.JSONException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import service.DatabaseService;
+import service.JsonService;
+import service.WikidataService;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 @Controller
 @RequestMapping("/HotOrNot")
@@ -90,11 +90,13 @@ public class HotOrNotController {
 		String vote = req.getParameter("params[voting]");
 		String id = req.getParameter("params[id]");
 
-		Stone stone = getNextStone();
-		if(stone != null){
-			fillModel(model, stone);
-		}else{			
-			HotOrNotController.LOG.error("Es konnte kein neuer Stein ermittelt werden.");
+		if(!StringUtils.isBlank(id)){			
+			Stone stone = getNextStone();
+			if(stone != null){
+				fillModel(model, stone);
+			}else{			
+				HotOrNotController.LOG.error("Es konnte kein neuer Stein ermittelt werden.");
+			}
 		}
 
 		return "HotOrNot";
@@ -114,11 +116,14 @@ public class HotOrNotController {
         try {
             String jsonString = jsonService.readJsonFromUrl(IMAGE_URL_PREFIX + imageName);
             JSONObject json = (JSONObject)new JSONParser().parse(jsonString);
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode node = mapper.readTree(jsonString);
-            ArrayNode arrayNode = (ArrayNode) node.get("imageinfo");
-            System.out.println(arrayNode);
-            List<JsonURLClass> urls = mapper.readValue(arrayNode.toString(), new TypeReference<List<JsonURLClass>>() {});
+            JSONObject query = (JSONObject) json.get("query");
+            JSONObject pages = (JSONObject) query.get("pages");
+            JSONObject bla = (JSONObject) pages.get("-1");
+            JSONArray imageInfo = (JSONArray) bla.get("imageinfo");
+            JSONObject urlString = (JSONObject) imageInfo.get(0);
+            
+            
+            return urlString.get("url").toString();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -131,7 +136,11 @@ public class HotOrNotController {
 		model.addAttribute("id", stone.getId());
 		model.addAttribute("info", "ID: " + stone.getId() + ") " + stone.getKommentar());
 		model.addAttribute("coords", stone.getCoordinates());
-		model.addAttribute("img", IMAGE_URL_PREFIX + stone.getBild() );
+		try {
+			model.addAttribute("img", getURL(stone.getBild()) );
+		} catch (ParseException e) {
+			HotOrNotController.LOG.error(e);
+		}
 	}
 
 	private Stone getNextStone(){
