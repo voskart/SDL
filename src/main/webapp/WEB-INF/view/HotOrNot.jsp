@@ -40,12 +40,14 @@
 <div>
     <br>
     <form  action="HotOrNot" method="POST">
-        <button class="btn btn-lg btn-success btn-block" value="hot" name="x" type="submit">
+		<input type="hidden" value="HOT" name="params[voting]">
+        <button class="btn btn-lg btn-success btn-block" type="submit" value="${id}" name="params[id]">
             HOT</button>
 	</form >
 <br>
     <form action="HotOrNot" method="POST">
-        <button class="btn btn-lg btn-danger btn-block" value="not" name="x" type="submit">
+       <input type="hidden" value="NOT" name="params[voting]">
+        <button class="btn btn-lg btn-danger btn-block" type="submit" value="${id}" name="params[id]">
             NOT</button>
 	</form>
 </div>

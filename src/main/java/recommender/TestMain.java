@@ -13,7 +13,7 @@ import model.Rating;
 public class TestMain {
 
 	public static void main(String[] args) {
-		Recommender rec = new Recommender(getRatings(), getStones());
+		Recommender rec = new Recommender(getRatings());
 		showRecommendations(rec);
 	}
 
@@ -46,29 +46,22 @@ public class TestMain {
 	}
 
 	private static void showRecommendations(Recommender rec) {
-		int user = 1;
-		int neighbourhood_size = 12;// 525;
-		int recommendations = 4;// 10;
-
-		for (int k = 1; k < 4; k++) {
-			user = k;
-			System.out.println();
-			System.out.println("Unsere Empfehlungen fuer Benutzer " + user
-					+ ":");
-
-			List<Integer> recomms = rec.getRecommendations(user,
-					neighbourhood_size, recommendations);
-			for(Integer i : recomms){
-				System.out.println("Stein mit ID = " + i);
-			}
-//			
-//			for (int i = 0; i < recomms.size(); i++) {
-//				System.out.println((i + 1) + ". Empfehlung: "
-//						+ recomms.get(i).getName() + " (ID: "
-//						+ recomms.get(i).getId() + ") - Predicted Rating: "
-//						+ recomms.get(i).getRatings());
+//		int user = 1;
+//		int neighbourhood_size = 12;// 525;
+//		int recommendations = 4;// 10;
+//
+//		for (int k = 1; k < 4; k++) {
+//			user = k;
+//			System.out.println();
+//			System.out.println("Unsere Empfehlungen fuer Benutzer " + user
+//					+ ":");
+//
+//			List<Integer> recomms = rec.getRecommendations(user,
+//					neighbourhood_size, recommendations);
+//			for(Integer i : recomms){
+//				System.out.println("Stein mit ID = " + i);
 //			}
-		}
+//		}
 	}
 
 	private static List<Rating> getRatings() {

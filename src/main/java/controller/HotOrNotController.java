@@ -76,6 +76,9 @@ public class HotOrNotController {
 //		model.addAttribute("img", dataArrayList.get(i % 3).getUrl());
 
 		i = i + 1;
+		
+		String vote = req.getParameter("params[voting]");
+		String id = req.getParameter("params[id]");
 
 		Stone stone = getNextStone();
 		if(stone != null){
@@ -87,12 +90,13 @@ public class HotOrNotController {
 		return "HotOrNot";
 	}
 	
-	private static final String IMAGE_URL_PREFIX = "https://commons.wikimedia.org/wiki/File:";
+	private static final String IMAGE_URL_PREFIX = "https://commons.wikimedia.org/wiki/Category:Geologische_Sammlung_(Stadtmuseum_Berlin)#/media/File:";
 	
 	private void fillModel(ModelMap model, Stone stone) {
+		model.addAttribute("id", stone.getId());
 		model.addAttribute("info", "ID: " + stone.getId() + ") " + stone.getKommentar());
 		model.addAttribute("coords", stone.getCoordinates());
-		model.addAttribute("img", IMAGE_URL_PREFIX + stone.getBild() + "#file");
+		model.addAttribute("img", IMAGE_URL_PREFIX + stone.getBild() );
 	}
 
 	private Stone getNextStone(){

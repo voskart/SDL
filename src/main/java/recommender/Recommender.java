@@ -2,8 +2,9 @@ package recommender;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import model.Rating;
 
@@ -23,17 +24,16 @@ public class Recommender {
 	private Integer usersStones[][] = null;
 	// Ähnlichkeitsmatrix
 	private double usersUsers[][] = null;
+	private List<Rating> ratings;
 
-	private Map<Integer, String> stoneNames;
-
-	public Recommender(List<Rating> ratings, Map<Integer, String> stoneNames) {
+	public Recommender(List<Rating> ratings) {
 		if (ratings == null || ratings.isEmpty()) {
 			return;
 		}
-		this.stoneNames = stoneNames;
+		this.ratings = ratings;
 		Recommender.ARRAYSIZE = ratings.size();
 		initializeMatrixes();
-		importRatings(ratings);
+		initializeRatingsMatrix();
 		generateSimTable();
 
 	}
@@ -52,10 +52,9 @@ public class Recommender {
 	 * @param ratings
 	 *            Bewertungen des Nutzers
 	 */
-	private void importRatings(List<Rating> ratings) {
+	private void initializeRatingsMatrix() {
 		for (Rating r : ratings) {
-			usersStones[r.getUserId()][r.getStoneId()] = r
-					.getVoting();
+			usersStones[r.getUserId()][r.getStoneId()] = r.getVoting();
 		}
 	}
 
@@ -196,7 +195,7 @@ public class Recommender {
 	 * @param recommendations
 	 * @return
 	 */
-	public List<Integer> getRecommendations(int userId, int neighbourSize,
+	private List<Integer> getRecommendations(int userId, int neighbourSize,
 			int recommendations) {
 		List<Neighbour> neighbours = getOrderedNeighbours(userId, neighbourSize);
 		neighbourSize = neighbours.size();
@@ -204,7 +203,7 @@ public class Recommender {
 		// Berechne zu jedem Stone die voraussichtliche Bewertung des Benutzers.
 		// Nehme diese Liste, um eine
 		// Empfehlung auszusprechen.
-		
+
 		// stoneCounter = 1; da kleineste stoneId = 1
 		ArrayList<Prediction> stones = new ArrayList<Prediction>();
 		for (int stoneCounter = 1; stoneCounter < ARRAYSIZE; stoneCounter++) {
@@ -224,8 +223,6 @@ public class Recommender {
 		}
 		return retList;
 	}
-	
-	
 
 	/**
 	 * 
@@ -261,20 +258,65 @@ public class Recommender {
 			return Math.round(zaehler / nenner);
 		}
 	}
-	
+
 	private class Prediction implements Comparable<Prediction> {
 		private Integer stoneId;
 		private double predictionRate;
-		
-		public Prediction(Integer stoneId, double d){
+
+		public Prediction(Integer stoneId, double d) {
 			this.stoneId = stoneId;
 			this.predictionRate = d;
 		}
-		
+
 		@Override
 		public int compareTo(Prediction o) {
 			return Double.compare(o.predictionRate, this.predictionRate);
 		}
+	}
+
+	/**
+	 * Gibt die ID des Steins zurück, die der Nutzer als nächstes bewerten muss.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public Integer getNext(Integer userId) {
+		Integer initialized = getInitializationStone(userId);
+		if (initialized != null) {
+			return initialized;
+		}
+
+		int neighbourhood_size = 12;
+		int recommendations = 1;
+
+		List<Integer> recomms = getRecommendations(userId, neighbourhood_size,
+				recommendations);
+		Integer nextStoneId = recomms.get(0);
+		return nextStoneId;
+	}
+
+	/**
+	 * Prüft, ob der User mit userId bereits die Steine 1 bi 10 bewertet hat.
+	 * Wenn nein, wird die ID des ersten Steins zurückgegeben, der nicht
+	 * bewertet wurde. Andernfalls null.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	private Integer getInitializationStone(Integer userId) {
+		Set<Integer> rated = new HashSet<Integer>();
+		for (Rating r : ratings) {
+			if (r.getUserId() == userId) {
+				rated.add(r.getStoneId());
+			}
+		}
+		for (int i = 1; i < 11; i++) {
+			if (!rated.contains(new Integer(i))) {
+				return i;
+			}
+		}
+
+		return null;
 	}
 
 }
