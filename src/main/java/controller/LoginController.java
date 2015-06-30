@@ -65,7 +65,7 @@ public class LoginController {
         // Check if the user is in the XML file
         if (tmp_bool){
             model.addAttribute("username", username);
-            return "HotOrNot";
+            return "redirect:HotOrNot";
         }else{
             // Else return an errorpage
             model.addAttribute("username", username);

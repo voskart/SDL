@@ -25,11 +25,6 @@ import service.DatabaseService;
 import service.JsonService;
 import service.WikidataService;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-
 @Controller
 @RequestMapping("/HotOrNot")
 public class HotOrNotController {
@@ -43,8 +38,8 @@ public class HotOrNotController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String printWelcome(ModelMap model) {
-		String stone = ""; // hier muss der Link zu dem Bild des Steines hin
-		model.addAttribute("image", stone);
+		String username = (String) model.get("username");
+		
 		WikidataService wds = new WikidataService();
 		// model.addAttribute("info", wds.getAbstract("Q744630") );
 		return "HotOrNot";
