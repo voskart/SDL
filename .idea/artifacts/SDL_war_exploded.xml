@@ -123,6 +123,7 @@
           <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
           <element id="library" level="project" name="Maven: org.webjars:jquery:2.0.3" />
           <element id="library" level="project" name="Maven: org.webjars:bootstrap:3.0.0" />
+          <element id="library" level="project" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="SDL/web/Web" />
