@@ -3,6 +3,7 @@ package model;
 import interfaces.IId;
 import interfaces.IRateable;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsefa.csv.annotation.CsvDataType;
 import org.jsefa.csv.annotation.CsvField;
 import org.jsefa.xml.annotation.XmlDataType;
@@ -264,6 +265,14 @@ public class Stone implements IRateable, IId{
 
 	public String getKommentar() {
 		return Kommentar;
+	}
+	
+	public Coordinates getCoordinates(){
+		if(!StringUtils.isBlank(this.FundortCoord)){
+			String[] coord = this.FundortCoord.split(",");
+			return new Coordinates(Double.valueOf(coord[0].trim()), Double.valueOf(coord[1].trim()));
+		}
+		return null;
 	}
 
 	public Stone() {

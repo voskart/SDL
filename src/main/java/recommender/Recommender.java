@@ -204,8 +204,10 @@ public class Recommender {
 		// Berechne zu jedem Stone die voraussichtliche Bewertung des Benutzers.
 		// Nehme diese Liste, um eine
 		// Empfehlung auszusprechen.
+		
+		// stoneCounter = 1; da kleineste stoneId = 1
 		ArrayList<Prediction> stones = new ArrayList<Prediction>();
-		for (int stoneCounter = 0; stoneCounter < ARRAYSIZE; stoneCounter++) {
+		for (int stoneCounter = 1; stoneCounter < ARRAYSIZE; stoneCounter++) {
 			if (usersStones[userId][stoneCounter] == null) {
 				stones.add(new Prediction(stoneCounter, getPrediction(userId,
 						stoneCounter, neighbours)));
@@ -217,7 +219,6 @@ public class Recommender {
 		Collections.sort(stones);
 
 		List<Integer> retList = new ArrayList<Integer>();
-		Integer tempStone = null;
 		for (int i = 0; i < recommendations; i++) {
 			retList.add(stones.get(i).stoneId);
 		}

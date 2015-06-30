@@ -1,5 +1,7 @@
 package model;
 
+import org.jsefa.xml.annotation.XmlDataType;
+import org.jsefa.xml.annotation.XmlElement;
 
 /**
  * Diese Klasse repräsentiert ein User-Rating.
@@ -7,15 +9,21 @@ package model;
  * @author benny
  * 
  */
+@XmlDataType(defaultElementName = "rating")
 public class Rating {
 
+	@XmlElement(name = "userid", pos = 1)
 	private Integer userId;
-	private Integer objectId;
-	private int voting;
 
-	public Rating(Integer user, Integer stone, int rating) {
+	@XmlElement(name = "stoneid", pos = 2)
+	private Integer stoneId;
+
+	@XmlElement(name = "voting", pos = 3)
+	private Integer voting;
+
+	public Rating(Integer user, Integer stone, Integer rating) {
 		this.userId = user;
-		this.objectId = stone;
+		this.stoneId = stone;
 		this.voting = rating;
 	}
 
@@ -28,14 +36,14 @@ public class Rating {
 	}
 
 	public Integer getStoneId() {
-		return objectId;
+		return stoneId;
 	}
 
 	public void setStoneId(Integer object) {
-		this.objectId = object;
+		this.stoneId = object;
 	}
 
-	public int getVoting() {
+	public Integer getVoting() {
 		return voting;
 	}
 

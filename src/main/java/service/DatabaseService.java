@@ -1,8 +1,8 @@
 package service;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -11,30 +11,17 @@ import javax.xml.xquery.XQDataSource;
 import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQExpression;
 import javax.xml.xquery.XQItem;
-import javax.xml.xquery.XQPreparedExpression;
-import javax.xml.xquery.XQResultSequence;
-import javax.xml.xquery.XQSequenceType;
 
+import model.Rating;
 import model.Stone;
 import model.User;
 import net.xqj.basex.BaseXXQDataSource;
 
 import org.apache.log4j.Logger;
 import org.basex.BaseXServer;
-import org.basex.core.BaseXException;
-import org.basex.core.Context;
-import org.basex.core.cmd.Add;
-import org.basex.core.cmd.CreateDB;
-import org.basex.core.cmd.DropDB;
-import org.basex.core.cmd.Export;
-import org.basex.core.cmd.InfoDB;
-import org.basex.core.cmd.Optimize;
-import org.basex.core.cmd.Set;
-import org.basex.core.cmd.XQuery;
 import org.basex.server.ClientSession;
 import org.jsefa.xml.XmlDeserializer;
 import org.jsefa.xml.XmlIOFactory;
-import org.jsefa.xml.XmlSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.ServletContextResource;
@@ -84,26 +71,49 @@ public class DatabaseService {
 		XQItem xqItem2 = xqc2.createItemFromDocument(
 				userResource.getInputStream(), null, null);
 		xqc2.insertItem("users.xml", xqItem2, null);
-
+		
+		importRatings(userResource, xqc2, xqItem2);
+		
 		xqe.executeCommand("SET WRITEBACK true");
 
 		xqc.close();
 
 	}
 
-	
-	 public void closeBasexDatabase() throws IOException { // Create
+	/**
+	 * Importiert die Datei ratings.xml in die basex Datenbank.
+	 * @param userResource
+	 * @param xqc2
+	 * @param xqItem2
+	 * @throws XQException
+	 * @throws IOException
+	 */
+	private void importRatings(ServletContextResource userResource,
+			XQConnection2 xqc2, XQItem xqItem2) throws XQException, IOException {
+		ServletContextResource ratingResource = new ServletContextResource(
+				servletContext, "/WEB-INF/content/ratings.xml");
 
-		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+		XQItem xqItem3 = xqc2.createItemFromDocument(
+				ratingResource.getInputStream(), null, null);
+		xqc2.insertItem("ratings.xml", xqItem3, null);
+	}
+
+	public void closeBasexDatabase() throws IOException { // Create
+
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
 		session.execute("drop database xmlDB");
 		session.close();
-	 }
-	 
-	public String getUserPasswordHash(String username) throws XQException, IOException {
-		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+	}
+
+	public String getUserPasswordHash(String username) throws XQException,
+			IOException {
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
-		String getUserPasswordHashResult= session.execute("xquery data(//users/user[username eq '" + username
+		String getUserPasswordHashResult = session
+				.execute("xquery data(//users/user[username eq '" + username
 						+ "']/password)");
 		session.close();
 		LOGGER.info("### getUserPasswordHashResult: "
@@ -112,7 +122,8 @@ public class DatabaseService {
 	}
 
 	public List<Stone> getAllStones() throws XQException, IOException {
-		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
 		data = session.execute("xquery //stones");
@@ -131,73 +142,81 @@ public class DatabaseService {
 	}
 
 	public Stone getStonebyId(Integer id) throws XQException, IOException {
-		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
-		data = session.execute("xquery //stones/stone[Id='"+id+"']");
+		data = session.execute("xquery //stones/stone[Id='" + id + "']");
 		session.close();
 		XmlDeserializer deserializer = XmlIOFactory.createFactory(Stone.class)
 				.createDeserializer();
 		StringReader reader = new StringReader(data);
 		deserializer.open(reader);
 		List<Stone> stones = new ArrayList<Stone>();
-		if(deserializer.hasNext()){
-		Stone p = deserializer.next();
-		return p;
-		} else {return null;}
+		if (deserializer.hasNext()) {
+			Stone p = deserializer.next();
+			return p;
+		} else {
+			return null;
+		}
 	}
 
 	// Returns all the usernames in a list (all usernames in form of a list)
 	public List<User> getAllUsers() throws XQException, IOException {
 
-		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
 		data = session.execute("xquery //users");
-        XmlDeserializer deserializer = XmlIOFactory.createFactory(User.class)
-                .createDeserializer();
-        StringReader reader = new StringReader(data);
-        deserializer.open(reader);
-        List<User> users = new ArrayList<User>();
-        while (deserializer.hasNext()) {
-            User u = deserializer.next();
-            users.add(u);
-            System.out.println(u.toString());
-        }
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(User.class)
+				.createDeserializer();
+		StringReader reader = new StringReader(data);
+		deserializer.open(reader);
+		List<User> users = new ArrayList<User>();
+		while (deserializer.hasNext()) {
+			User u = deserializer.next();
+			users.add(u);
+			System.out.println(u.toString());
+		}
 		session.close();
 		return users;
 	}
 
 	public String insertNewUserData(User user) throws XQException, IOException {
 
-		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
-//		System.out.println(session.execute("info"));
-//        XmlSerializer serializer = XmlIOFactory.createFactory(User.class).createSerializer();
-//        StringWriter writer = new StringWriter();
-//        serializer.open(writer);
-//        serializer.write(user);
-//        serializer.close(true);
-//        String userXML = writer.toString();
-//        writer.close();
-//        System.out.println(userXML);
-//        data = session.execute("xquery let $up := <user>\n" +
-//                "  <username>hallo</username>\n" +
-//                "  <password>bla</password>\n" +
-//                "  <uuid>111</uuid>\n" +
-//                "</user> return insert node $up as last into /users");
-        data = session.execute("xquery let $up :=  <user>" + "<username>"
-						+ user.getUsername() + "</username>" + "<password>"
-						+ user.getPassword() + "</password>" + "<uuid>" + user.getId()
-						+ "</uuid>" + "</user> return insert node $up as last into /users");
+		// System.out.println(session.execute("info"));
+		// XmlSerializer serializer =
+		// XmlIOFactory.createFactory(User.class).createSerializer();
+		// StringWriter writer = new StringWriter();
+		// serializer.open(writer);
+		// serializer.write(user);
+		// serializer.close(true);
+		// String userXML = writer.toString();
+		// writer.close();
+		// System.out.println(userXML);
+		// data = session.execute("xquery let $up := <user>\n" +
+		// "  <username>hallo</username>\n" +
+		// "  <password>bla</password>\n" +
+		// "  <uuid>111</uuid>\n" +
+		// "</user> return insert node $up as last into /users");
+		data = session.execute("xquery let $up :=  <user>" + "<username>"
+				+ user.getUsername() + "</username>" + "<password>"
+				+ user.getPassword() + "</password>" + "<uuid>" + user.getId()
+				+ "</uuid>"
+				+ "</user> return insert node $up as last into /users");
 		session.close();
 		return data;
 	}
 
 	public Integer getLastUserID() throws XQException, IOException {
 
-		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
 		String data = session.execute("open xmlDB");
 		System.out.println(session.execute("set writeback true"));
 		data = session.execute("xquery data((//users/user/uuid)[last()])");
@@ -207,10 +226,47 @@ public class DatabaseService {
 
 	public void exportData(String path) throws XQException, IOException {
 
-		ClientSession session = new ClientSession("localhost", 1984, "admin", "admin");
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
 		String data = session.execute("open xmlDB");
 		System.out.println(session.execute("set writeback true"));
-		data = session.execute("export "+path);
+		data = session.execute("export " + path);
 		session.close();
+	}
+
+	public List<Rating> getAllRatings() throws XQException, IOException {
+
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
+		String data = session.execute("open xmlDB");
+		session.execute("SET WRITEBACK TRUE");
+		data = session.execute("xquery //ratings");
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(Rating.class)
+				.createDeserializer();
+		StringReader reader = new StringReader(data);
+		deserializer.open(reader);
+		List<Rating> users = new ArrayList<Rating>();
+		while (deserializer.hasNext()) {
+			Rating u = deserializer.next();
+			users.add(u);
+			System.out.println(u.toString());
+		}
+		session.close();
+		return users;
+	}
+
+	public String insertRating(Rating rating) throws XQException, IOException {
+
+		ClientSession session = new ClientSession("localhost", 1984, "admin",
+				"admin");
+		String data = session.execute("open xmlDB");
+		session.execute("SET WRITEBACK TRUE");
+		data = session.execute("xquery let $up :=  <rating>" + "<userId>"
+				+ rating.getUserId() + "</userId>" + "<stoneId>"
+				+ rating.getStoneId() + "</stoneId>" + "<voting>"
+				+ rating.getVoting() + "</voting>"
+				+ "</rating> return insert node $up as last into /ratings");
+		session.close();
+		return data;
 	}
 }
