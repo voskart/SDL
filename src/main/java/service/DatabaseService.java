@@ -106,19 +106,37 @@ public class DatabaseService {
 		session.close();
 	}
 
-	public String getUserPasswordHash(String username) throws XQException,
-			IOException {
+//	public String getUserPasswordHash(String username) throws XQException,
+//			IOException {
+//		ClientSession session = new ClientSession("localhost", 1984, "admin",
+//				"admin");
+//		String data = session.execute("open xmlDB");
+//		session.execute("SET WRITEBACK TRUE");
+//		String getUserPasswordHashResult = session
+//				.execute("xquery data(//users/user[username eq '" + username
+//						+ "']/password)");
+//		session.close();
+//		LOGGER.info("### getUserPasswordHashResult: "
+//				+ getUserPasswordHashResult);
+//		return getUserPasswordHashResult;
+//	}
+	
+	public User getUserByName(String username) throws XQException, IOException {
 		ClientSession session = new ClientSession("localhost", 1984, "admin",
 				"admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
-		String getUserPasswordHashResult = session
-				.execute("xquery data(//users/user[username eq '" + username
-						+ "']/password)");
+		data = session.execute("xquery //users/user[username='" + username + "']");
 		session.close();
-		LOGGER.info("### getUserPasswordHashResult: "
-				+ getUserPasswordHashResult);
-		return getUserPasswordHashResult;
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(User.class)
+				.createDeserializer();
+		StringReader reader = new StringReader(data);
+		deserializer.open(reader);
+		if (deserializer.hasNext()) {
+			return deserializer.next();
+		} else {
+			return null;
+		}
 	}
 
 	public List<Stone> getAllStones() throws XQException, IOException {

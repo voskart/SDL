@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import service.DatabaseService;
 
@@ -41,7 +42,7 @@ public class LoginController {
     @RequestMapping(method = RequestMethod.POST)
     public String login(
             HttpServletRequest req, HttpServletResponse resp,
-            ModelMap model) throws XQException, IOException {
+            ModelMap model, final RedirectAttributes redirectAttrs) throws XQException, IOException {
 
         logger.info("Successfully logged in");
         String username = req.getParameter("username");
@@ -55,16 +56,16 @@ public class LoginController {
 
         logger.info("username: " + username + ", password: " + passwordHash);
 
-        boolean tmp_bool = false;
+        User dbUser = null;
         try {
-            tmp_bool = validateUserInXMLDB(tmp_user);
+        	dbUser = validateUserInXMLDB(tmp_user);
         } catch (BaseXException e) {
             e.printStackTrace();
         }
 
         // Check if the user is in the XML file
-        if (tmp_bool){
-            model.addAttribute("username", username);
+        if (dbUser != null){
+        	req.getSession().setAttribute("user", dbUser);
             return "redirect:HotOrNot";
         }else{
             // Else return an errorpage
@@ -112,15 +113,15 @@ public class LoginController {
         return result;
     }
 
-    private boolean validateUserInXMLDB(User user) throws XQException, IOException {
+    private User validateUserInXMLDB(User user) throws XQException, IOException {
 
         // Get the dbservice instance
         // DatabaseService dbservice = new DatabaseService();
 //        DatabaseService dbservice = DatabaseService.getInstance();
         String tmpPass = user.getPassword();
-        String userHash = null;
+        User dbUser = null;
         try{
-        	userHash = dbservice.getUserPasswordHash(user.getUsername());
+        	dbUser = dbservice.getUserByName(user.getUsername());
         }catch (NullPointerException e){
             logger.info(e.getMessage());
         }
@@ -128,12 +129,12 @@ public class LoginController {
 
         try {
             // Check if the password in the XML equals the one in the passed form
-            if (user.getPassword().equals(userHash)){
-                return true;
+            if (user.getPassword().equals(dbUser.getPassword())){
+                return dbUser;
             }
         }catch (Exception e){
             logger.info(e.getMessage());
         }
-        return false;
+        return null;
     }
 }

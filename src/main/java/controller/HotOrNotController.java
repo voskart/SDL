@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.xquery.XQException;
 
 import model.Stone;
+import model.User;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -18,6 +19,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -37,10 +39,11 @@ public class HotOrNotController {
 	private static Logger LOG = Logger.getLogger(HotOrNotController.class);
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String printWelcome(ModelMap model) {
-		String username = (String) model.get("username");
+	public String printWelcome(HttpServletRequest req, ModelMap model) {
+		User currentUser = (User) req.getSession().getAttribute("user");
 		
-		WikidataService wds = new WikidataService();
+		
+//		WikidataService wds = new WikidataService();
 		// model.addAttribute("info", wds.getAbstract("Q744630") );
 		return "HotOrNot";
 	}
@@ -83,9 +86,10 @@ public class HotOrNotController {
 		i = i + 1;
 		
 		String vote = req.getParameter("params[voting]");
-		String id = req.getParameter("params[id]");
+		String stoneId = req.getParameter("params[id]");
 
-		if(!StringUtils.isBlank(id)){			
+		User currentUser = (User) req.getSession().getAttribute("user");
+		if(!StringUtils.isBlank(stoneId)){			
 			Stone stone = getNextStone();
 			if(stone != null){
 				fillModel(model, stone);

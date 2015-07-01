@@ -280,7 +280,7 @@ public class Recommender {
 	 * @param userId
 	 * @return
 	 */
-	public Integer getNext(Integer userId) {
+	public Integer getNextStone(Integer userId) {
 		Integer initialized = getInitializationStone(userId);
 		if (initialized != null) {
 			return initialized;
