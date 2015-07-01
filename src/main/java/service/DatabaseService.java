@@ -279,9 +279,9 @@ public class DatabaseService {
 				"admin");
 		String data = session.execute("open xmlDB");
 		session.execute("SET WRITEBACK TRUE");
-		data = session.execute("xquery let $up :=  <rating>" + "<userId>"
-				+ rating.getUserId() + "</userId>" + "<stoneId>"
-				+ rating.getStoneId() + "</stoneId>" + "<voting>"
+		data = session.execute("xquery let $up :=  <rating>" + "<userid>"
+				+ rating.getUserId() + "</userid>" + "<stoneid>"
+				+ rating.getStoneId() + "</stoneid>" + "<voting>"
 				+ rating.getVoting() + "</voting>"
 				+ "</rating> return insert node $up as last into /ratings");
 		session.close();

@@ -17,7 +17,8 @@ import model.Rating;
  * 
  */
 public class Recommender {
-	private static int ARRAYSIZE;
+	private static int MAX_STONE_ID;
+	private static int MAX_USER_ID;
 
 	// Matrix, welche die Ratings enthält (users_movies[userId][movieId] =
 	// rating)
@@ -31,19 +32,40 @@ public class Recommender {
 			return;
 		}
 		this.ratings = ratings;
-		Recommender.ARRAYSIZE = ratings.size();
+		Recommender.MAX_STONE_ID = getMaxStoneId() + 1;
+		Recommender.MAX_USER_ID = getMaxUserId() + 1;
 		initializeMatrixes();
 		initializeRatingsMatrix();
 		generateSimTable();
 
 	}
 
+	private Integer getMaxUserId() {
+		Integer max = 0;
+		for (Rating r : ratings) {
+			if (r.getUserId() > max) {
+				max = r.getUserId();
+			}
+		}
+		return max;
+	}
+	
+	private Integer getMaxStoneId() {
+		Integer max = 0;
+		for (Rating r : ratings) {
+			if (r.getStoneId() > max) {
+				max = r.getStoneId();
+			}
+		}
+		return max;
+	}
+
 	/**
 	 * Initialisiert die Matrizen auf denen die Berechnungen stattfinden.
 	 */
 	private void initializeMatrixes() {
-		usersStones = new Integer[Recommender.ARRAYSIZE][Recommender.ARRAYSIZE];
-		usersUsers = new double[Recommender.ARRAYSIZE][Recommender.ARRAYSIZE];
+		usersStones = new Integer[Recommender.MAX_USER_ID][Recommender.MAX_STONE_ID];
+		usersUsers = new double[Recommender.MAX_USER_ID][Recommender.MAX_USER_ID];
 	}
 
 	/**
@@ -65,10 +87,10 @@ public class Recommender {
 	 * @param userId
 	 * @return
 	 */
-	public double getMeanOfUser(int userId) {
+	private double getMeanOfUser(int userId) {
 		int numberOfVotes = 0;
 		int absolut = 0;
-		for (int i = 0; i < ARRAYSIZE; i++) {
+		for (int i = 0; i < MAX_STONE_ID; i++) {
 			if (usersStones[userId][i] != null && usersStones[userId][i] > 0) {
 				absolut = absolut + usersStones[userId][i];
 				numberOfVotes++;
@@ -87,8 +109,8 @@ public class Recommender {
 	 * enthält.
 	 */
 	private void generateSimTable() {
-		for (int userA = 1; userA < ARRAYSIZE; userA++) {
-			for (int userB = 1; userB < ARRAYSIZE; userB++) {
+		for (int userA = 0; userA < MAX_USER_ID; userA++) {
+			for (int userB = 0; userB < MAX_USER_ID; userB++) {
 				// intersection enthält die Schnittmenge der Steine, für die
 				// beide User ein Voting abgegeben haben.
 				ArrayList<Integer> intersection = getIntersectionOf(userA,
@@ -140,17 +162,13 @@ public class Recommender {
 	 */
 	private ArrayList<Integer> getIntersectionOf(int userA, int userB) {
 		ArrayList<Integer> intersection = new ArrayList<Integer>();
-		for (int i = 0; i < ARRAYSIZE; i++) {
+		for (int i = 0; i < MAX_STONE_ID; i++) {
 			if ((usersStones[userA][i] != null)
 					&& (usersStones[userB][i] != null)) {
 				intersection.add(i);
 			}
 		}
 		return intersection;
-	}
-
-	public double getSimBetween(int userA, int userB) {
-		return usersUsers[userA][userB];
 	}
 
 	/**
@@ -161,9 +179,9 @@ public class Recommender {
 	 * @param neighbourhood
 	 * @return
 	 */
-	public List<Neighbour> getOrderedNeighbours(int user, int neighbourhood) {
+	private List<Neighbour> getOrderedNeighbours(int user, int neighbourhood) {
 		ArrayList<Neighbour> neighbours = new ArrayList<Neighbour>();
-		for (int i = 0; i < ARRAYSIZE; i++) {
+		for (int i = 0; i < MAX_USER_ID; i++) {
 			if (i != user) {
 				if (usersUsers[user][i] != -99) {
 					neighbours.add(new Neighbour(i, usersUsers[user][i],
@@ -178,12 +196,6 @@ public class Recommender {
 		}
 		return neighbours.subList(0, neighbourhood);
 	}
-
-	// Addiert die Bewertungen je Film aus einer Nachbarschaft auf, erzeugt eine
-	// Film-
-	// Liste und sortiert diese nach den addierten Bewertungen und gibt dann die
-	// Anzahl
-	// angegebener Empfehlungen zurÃ¼ck.
 
 	/**
 	 * Gibt eine Liste von Steinen zurück, die der Butzer mir userID = userId
@@ -206,20 +218,27 @@ public class Recommender {
 
 		// stoneCounter = 1; da kleineste stoneId = 1
 		ArrayList<Prediction> stones = new ArrayList<Prediction>();
-		for (int stoneCounter = 1; stoneCounter < ARRAYSIZE; stoneCounter++) {
+		for (int stoneCounter = 0; stoneCounter < MAX_STONE_ID; stoneCounter++) {
 			if (usersStones[userId][stoneCounter] == null) {
 				stones.add(new Prediction(stoneCounter, getPrediction(userId,
 						stoneCounter, neighbours)));
 			}
 		}
 
-		// Das Movie Array muss entsprechend sortiert werden, ohne die Zuordung
-		// auf den Index zu verlieren
+		// sortiere nach Güte der Vorhersage
 		Collections.sort(stones);
 
 		List<Integer> retList = new ArrayList<Integer>();
-		for (int i = 0; i < recommendations; i++) {
-			retList.add(stones.get(i).stoneId);
+		
+		if(stones != null && !stones.isEmpty()){
+			for (int i = 0; i < recommendations; i++) {
+				retList.add(stones.get(i).stoneId);
+			}			
+		}else{ // wenn es keine Bewertungen anderer Benuter gibt
+			Integer next = getMaxStoneId();
+			for (int i = 0; i < recommendations; i++) {
+				retList.add(++next);
+			}
 		}
 		return retList;
 	}
@@ -236,7 +255,7 @@ public class Recommender {
 	 *            Nachbarn des momentan betrachteten Users
 	 * @return
 	 */
-	public double getPrediction(int userId, int stoneId,
+	private double getPrediction(int userId, int stoneId,
 			List<Neighbour> neighbours) {
 		double zaehler = 0;
 		double nenner = 0;
@@ -305,15 +324,16 @@ public class Recommender {
 	 */
 	private Integer getInitializationStone(Integer userId) {
 		Set<Integer> rated = new HashSet<Integer>();
-		for (Rating r : ratings) {
-			if (r.getUserId() == userId) {
-				rated.add(r.getStoneId());
-			}
+		if (this.ratings != null) {
+			for (Rating r : ratings) {
+				if (r.getUserId() == userId) {
+					rated.add(r.getStoneId());
+				}
+			}			
 		}
-		for (int i = 1; i < 11; i++) {
-			if (!rated.contains(new Integer(i))) {
-				return i;
-			}
+
+		if (rated.size() < 3) {
+			return rated.size();
 		}
 
 		return null;

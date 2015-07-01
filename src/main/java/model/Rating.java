@@ -20,6 +20,8 @@ public class Rating {
 
 	@XmlElement(name = "voting", pos = 3)
 	private Integer voting;
+	
+	public Rating(){};
 
 	public Rating(Integer user, Integer stone, Integer rating) {
 		this.userId = user;
@@ -50,4 +52,12 @@ public class Rating {
 	public void setVoting(int rating) {
 		this.voting = rating;
 	}
+
+	@Override
+	public String toString() {
+		return "Rating [userId=" + userId + ", stoneId=" + stoneId
+				+ ", voting=" + voting + "]";
+	}
+	
+	
 }

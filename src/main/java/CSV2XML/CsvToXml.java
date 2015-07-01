@@ -29,10 +29,16 @@ public class CsvToXml {
 
 		int userId = 0;
     	List<Stone> list = new ArrayList<Stone>();
+    	boolean header = true;
     	for (String[] s:str){
-        	Stone stone = Stone.create(s);
-        	stone.setId(userId++);
-        	list.add(stone);
+    		if(header){
+    			// sogt dafür, dass aus dem Header kein Objekt erzeigt wird.
+    			header = false;
+    		}else{
+    			Stone stone = Stone.create(s);
+    			stone.setId(userId++);
+    			list.add(stone);    			
+    		}
     	}
     	
     	XmlSerializer serializer = XmlIOFactory.createFactory(Stone.class).createSerializer();
