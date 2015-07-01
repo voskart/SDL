@@ -332,7 +332,7 @@ public class Recommender {
 			}			
 		}
 
-		if (rated.size() < 3) {
+		if (rated.size() < 9) {
 			return rated.size();
 		}
 
