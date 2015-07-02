@@ -91,7 +91,7 @@ public class HotOrNotController {
 			JSONArray imageInfo = (JSONArray) bla.get("imageinfo");
 
 			if (imageInfo == null) {
-				return "";
+				return "http://img2.wikia.nocookie.net/__cb20140118173446/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png";
 			}
 			JSONObject urlString = (JSONObject) imageInfo.get(0);
 
