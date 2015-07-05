@@ -33,7 +33,7 @@
 <div>&nbsp;</div>
 <div><center>
   <p>Willkommen zu "Steine der Leidenschaft"</p>
-  <p>Diese Seite ist im Rahmen eines Projektes für den Kurs XML-Technologien entstanden.</p>
+  <p>Diese Seite ist im Rahmen eines Projektes f&uumlr den Kurs XML-Technologien entstanden.</p>
   </center>
 </div>
 <div>
