@@ -25,7 +25,7 @@
 <div class="container-fluid">
   <div>
     <div class="col-lg-offset-0 col-md-offset-0 col-md-12">
-      <h1 class="text-center"><strong>Steiner der Leidenschaft</strong></h1>
+      <h1 class="text-center"><strong>Steine der Leidenschaft</strong></h1>
     </div>
   </div>
   <hr>

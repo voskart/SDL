@@ -119,8 +119,7 @@ public class HotOrNotController {
 		}
 
 		model.addAttribute("id", stone.getId());
-		model.addAttribute("info",
-				"ID: " + stone.getId() + ") " + stone.getKommentar());
+		model.addAttribute("info", stone.getKommentar());
 		model.addAttribute("coords", stone.getCoordinates());
 		try {
 			model.addAttribute("img", getURL(stone.getBild()));
