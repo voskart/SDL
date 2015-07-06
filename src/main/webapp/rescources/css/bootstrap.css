@@ -194,12 +194,20 @@ th {
 	background-color: hsla(0,0%,80%,1.00);
 	border-radius: 15px;
 	text-align: justify;
+	height: 100%;
 }
 .infobox {
-	width: 100%;
+	width: 80%;
 	clear: both;
 	background-color: hsla(0,0%,80%,1.00);
 	border-radius: 15px;
+	height: 60%;
+	border-spacing: 0px 0px;
+	text-align: center;
+	left: 10%;
+	right: 0%;
+	margin-left: 10%;
+	margin-right: 10%;
 }
 
 .Map {
@@ -215,20 +223,18 @@ th {
 	padding-left: 0%;
 }
 .HotOrNot {
-	width: 100%;
+	width: 99%;
 	border-color: hsla(0,0%,65%,1.00);
 	border-radius: 15px;
 	background-color: hsla(0,0%,80%,1.00);
-	height: 10%;
 }
 .Not {
-	width: 50%;
+	width: 45%;
 	float: right;
-	height: 0%;
 }
 .Rocks {
 	float: left;
-	width: 50%;
+	width: 45%;
 	height: 100%;
 }
 .stein {
@@ -245,22 +251,31 @@ th {
 	margin-left: 5%;
 }
 .googlemap {
-	width: 90%;
-	height: 100%;
 	padding-right: 2%;
 	padding-top: 2%;
 	padding-bottom: 2%;
 	padding-left: 2%;
+	width: 100%;
+	height: 100%;
 }
 .imageMap {
 	width: 100%;
-	height: 70%;
+	height: 60%;
 }
 .logRegFenster {
 	background-color: hsla(0,0%,80%,1.00);
 	width: 49%;
 	border-radius: 15px;
 }
+.tabelle {
+	background-color: hsla(0,0%,80%,1.00);
+	border-radius: 15px;
+	padding-right: 2%;
+	padding-top: 2%;
+	padding-bottom: 2%;
+	padding-left: 2%;
+}
+
 
 
 
@@ -3224,6 +3239,8 @@ fieldset[disabled] .btn-primary.active {
 	border-color: #4cae4c;
 	width: 100%;
 	border-radius: 15px;
+	margin-right: 3%;
+	margin-left: 3%;
 }
 .btn-success:hover,
 .btn-success:focus,
@@ -3362,6 +3379,8 @@ fieldset[disabled] .btn-warning.active {
 	width: 100%;
 	float: right;
 	border-radius: 15px;
+	margin-left: 3%;
+	margin-right: 3%;
 }
 .btn-danger:hover,
 .btn-danger:focus,
