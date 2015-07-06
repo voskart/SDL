@@ -4,45 +4,56 @@
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("jquery.min.js") %>'></script>
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("js/bootstrap.min.js") %>'></script>
 <html>
-<link rel="stylesheet" href="<%=request.getContextPath()%>/rescources/bootstrap.css"/>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link href="/SDL/rescources/css/bootstrap.css" rel="stylesheet" type="text/css">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <title>SDL</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDL</title>
 </head>
 <body>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-offset-0 col-md-12">
-      <h1 class="text-center"><strong>Steine</strong> <strong>der</strong> <strong>Leidenschaft</strong></h1>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#inverseNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+      <a class="navbar-brand" href="#">SDL</a></div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="inverseNavbar1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">"Rocks or Not"<span class="sr-only">(current)</span></a></li>
+        <li ><a href="/SDL/Table">Table</a></li>
+      </ul>
     </div>
+    <!-- /.navbar-collapse -->
   </div>
-</div>
-<div class="col-lg-8 imagebox">
-<img src="${img}" alt="" width="654" height="515" class="Stone"/>
-<div class="HotOrNot">
+  <!-- /.container-fluid -->
+</nav>
+<div class="imageMap">
+<div class="imagebox">
+		<img src="${img}" class="steinbild" >
+    <div class="HotOrNot">
 
-  <form  action="HotOrNot" method="POST"><input type="hidden" value="HOT" name="params[voting]"><button class="btn btn-lg btn-success " type="submit" value="${id}" name="params[id]">ROCKS</button></form>
-  <form  action="HotOrNot" method="POST"><input type="hidden" value="NOT" name="params[voting]"><button class="btn btn-lg btn-danger " type="submit" value="${id}" name="params[id]">NOT</button></form>
-  &nbsp;</div>
+ 				 <form class="Rocks" action="HotOrNot" method="POST"><input type="hidden" value="HOT" name="params[voting]"><button class=" btn-success " type="submit" value="${id}" name="params[id]">ROCKS</button></form>
+  				<form class="Not"  action="HotOrNot" method="POST"><input type="hidden" value="NOT" name="params[voting]"><button class=" btn-danger " type="submit" value="${id}" name="params[id]">NOT</button></form>
+  &nbsp;
+  	</div>
 </div>
 <div class="Map"><strong>FUNDORT</strong><br>
  <iframe
-                width="250"
-                height="300"
+                class="googlemap"
                 frameborder="0" style="border:0"
                 src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAr19r1kEhzdA4Rms8lF4l3NO7nAgXFCnk
             &q=${coords.xCoordinate},${coords.yCoordinate}" allowfullscreen>
         </iframe>
  </div>
-<div class="infobox"><div><strong>INFO</strong></div><br><dif><form name="infos" class="infotext">${info}</form></div></div>
-&nbsp;<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="SDL/js/jquery-1.11.2.min.js"></script>
-
-<!-- Include all compiled plugins (below), or include individual files as needed --> 
-<script src="SDL/js/bootstrap.js"></script>
-<embed src="<%=request.getContextPath()%>/rescources/Rocks Song by Peter Weatherall.wmv" autostart="true" loop="true"
-width="2" height="0">
-</embed>
-<audio src =”<%=request.getContextPath()%>/rescources/music.wmv”  autoplay=”true”>
+ </div>
+<div class="infobox"><div><strong><center>INFO</center></strong></div><br><dif><form name="infos" class="infotext">${info}</form></div></div>
 </body>
 </html>

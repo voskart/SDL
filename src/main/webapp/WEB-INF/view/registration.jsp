@@ -11,9 +11,30 @@
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("jquery.min.js") %>'></script>
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("js/bootstrap.min.js") %>'></script>
 <html>
+<head>
+<title>SDL Registration-Page</title>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#inverseNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+      <a class="navbar-brand" href="#">SDL</a></div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="inverseNavbar1">
+      <ul class="nav navbar-nav">
+        <li ><a href="/SDL/login">Login</a></li>
+        <li class="active"><a href="#">Registration<span class="sr-only">(current)</span></a></li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container-fluid -->
+</nav>
 <div class="container">
     <div class="row">
-        <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <div class="col-sm-6 col-md-4 col-md-offset-4" class="grey">
             <h1 class="text-center login-title">Register for SDL</h1>
             <div class="account-wall">
                 <form action="registration" method="POST">
@@ -24,7 +45,6 @@
                         Create an account</button>
                 </form>
             </div>
-            <a href="/login" class="text-center new-account">Click if you're already registered </a>
         </div>
     </div>
 </div>
