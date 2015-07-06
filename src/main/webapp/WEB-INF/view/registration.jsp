@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel='stylesheet' href='<%= org.webjars.AssetLocator.getWebJarPath("css/bootstrap.min.css") %>'>
 <link rel='stylesheet' href='<%= org.webjars.AssetLocator.getWebJarPath("css/bootstrap-theme.min.css") %>'>
+<link href="/SDL/rescources/css/bootstrap.css" rel="stylesheet" type="text/css">
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("jquery.min.js") %>'></script>
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("js/bootstrap.min.js") %>'></script>
 <html>
@@ -32,10 +33,11 @@
   </div>
   <!-- /.container-fluid -->
 </nav>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6 col-md-4 col-md-offset-4" class="grey">
-            <h1 class="text-center login-title">Register for SDL</h1>
+<center>
+<div  class="container">
+	<div class="row">
+    	<div class="col-sm-6 col-md-4 col-md-offset-4" class="grey">
+            <h1 class="text-centere">Register for SDL</h1>
             <div class="account-wall">
                 <form action="registration" method="POST">
                     <input type="text" name="username" class="form-control" placeholder="username" required autofocus>
@@ -45,8 +47,9 @@
                         Create an account</button>
                 </form>
             </div>
-        </div>
-    </div>
+         </div>
+     </div>
 </div>
+</center>
 </body>
 </html>

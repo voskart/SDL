@@ -3,7 +3,8 @@
 <link rel='stylesheet' href='<%= org.webjars.AssetLocator.getWebJarPath("css/bootstrap.min.css") %>'>
 <link rel='stylesheet' href='<%= org.webjars.AssetLocator.getWebJarPath("css/bootstrap-theme.min.css") %>'>
 <!-- <link href="../../rescources/bootstrap.css" rel="stylesheet" type="text/css"> -->
-<link href="css/bootstrap-3.3.4.css" rel="stylesheet" type="text/css">
+<link href="/SDL/rescources/css/bootstrap-3.3.4.css" rel="stylesheet" type="text/css">
+<link href="/SDL/rescources/css/bootstrap.css" rel="stylesheet" type="text/css">
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("jquery.min.js") %>'></script>
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("js/bootstrap.min.js") %>'></script>
 <html>
@@ -39,7 +40,7 @@
   </div>
   <!-- /.container-fluid -->
 </nav>
-<div class="container">
+<div class="container" >
     <div class="row">
 		<div class="col-sm-6 col-md-4 col-md-offset-4" class="grey">
             <h1 class="text-center login-title">Sign in to SDL</h1>
