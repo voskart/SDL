@@ -17,6 +17,7 @@ import model.Stone;
 import model.User;
 import net.xqj.basex.BaseXXQDataSource;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.basex.BaseXServer;
 import org.basex.server.ClientSession;
@@ -105,21 +106,6 @@ public class DatabaseService {
 		session.execute("drop database xmlDB");
 		session.close();
 	}
-
-//	public String getUserPasswordHash(String username) throws XQException,
-//			IOException {
-//		ClientSession session = new ClientSession("localhost", 1984, "admin",
-//				"admin");
-//		String data = session.execute("open xmlDB");
-//		session.execute("SET WRITEBACK TRUE");
-//		String getUserPasswordHashResult = session
-//				.execute("xquery data(//users/user[username eq '" + username
-//						+ "']/password)");
-//		session.close();
-//		LOGGER.info("### getUserPasswordHashResult: "
-//				+ getUserPasswordHashResult);
-//		return getUserPasswordHashResult;
-//	}
 	
 	public User getUserByName(String username) throws XQException, IOException {
 		ClientSession session = new ClientSession("localhost", 1984, "admin",
@@ -128,6 +114,11 @@ public class DatabaseService {
 		session.execute("SET WRITEBACK TRUE");
 		data = session.execute("xquery //users/user[username='" + username + "']");
 		session.close();
+		
+		if(StringUtils.isBlank(data)){
+			return null;
+		}
+		
 		XmlDeserializer deserializer = XmlIOFactory.createFactory(User.class)
 				.createDeserializer();
 		StringReader reader = new StringReader(data);

@@ -129,7 +129,7 @@ public class LoginController {
 
         try {
             // Check if the password in the XML equals the one in the passed form
-            if (user.getPassword().equals(dbUser.getPassword())){
+            if (dbUser != null && user.getPassword().equals(dbUser.getPassword())){
                 return dbUser;
             }
         }catch (Exception e){
