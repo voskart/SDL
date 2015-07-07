@@ -4,7 +4,7 @@
 <link rel='stylesheet' href='<%= org.webjars.AssetLocator.getWebJarPath("css/bootstrap-theme.min.css") %>'>
 <!-- <link href="../../rescources/bootstrap.css" rel="stylesheet" type="text/css"> -->
 <link href="/SDL/rescources/css/bootstrap-3.3.4.css" rel="stylesheet" type="text/css">
-<link href="/SDL/rescources/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="/SDL/rescources/css/sdlstyle.css" rel="stylesheet" type="text/css">
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("jquery.min.js") %>'></script>
 <script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("js/bootstrap.min.js") %>'></script>
 <html>

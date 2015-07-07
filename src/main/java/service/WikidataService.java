@@ -43,12 +43,4 @@ public class WikidataService {
 		wikiAbstract=wikiAbstract.replace("\"@de )", "");
 		return wikiAbstract;
 	}
-	
-	
-	
-	public static void main(String[] args) {
-		//Beispiel
-		WikidataService wds = new WikidataService();
-		System.out.println(wds.getAbstract("Q744630"));
-    }
 }

@@ -19,6 +19,6 @@ public class HelloController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String printWelcome(ModelMap model) {
 		model.addAttribute("message", "SDL");
-		return "hello";
+		return "login";
 	}
 }

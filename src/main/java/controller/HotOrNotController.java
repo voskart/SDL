@@ -10,6 +10,7 @@ import model.Rating;
 import model.Stone;
 import model.User;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONException;
 import org.json.simple.JSONArray;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import recommender.Recommender;
 import service.DatabaseService;
 import service.JsonService;
+import service.WikidataService;
 
 @Controller
 @RequestMapping("/HotOrNot")
@@ -32,6 +34,9 @@ public class HotOrNotController {
 
 	@Autowired
 	private DatabaseService dbservice;
+
+	@Autowired
+	private WikidataService wdService;
 	private static Logger LOG = Logger.getLogger(HotOrNotController.class);
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -119,12 +124,21 @@ public class HotOrNotController {
 		}
 
 		model.addAttribute("id", stone.getId());
-		model.addAttribute("info", stone.getKommentar());
+		
+		String info = getInfosWithSparql(stone.getMaterialId());
+		if(StringUtils.isBlank(info)){
+			info = stone.getKommentar();
+		}
+		model.addAttribute("info", info);
 		model.addAttribute("coords", stone.getCoordinates());
 		try {
 			model.addAttribute("img", getURL(stone.getBild()));
 		} catch (ParseException e) {
 			HotOrNotController.LOG.error(e);
 		}
+	}
+
+	private String getInfosWithSparql(String materialID) {
+		return wdService.getAbstract(materialID);
 	}
 }
