@@ -32,109 +32,126 @@ import service.DatabaseService;
 public class LoginController {
 
 	@Autowired
-    private DatabaseService dbservice;
-	
-    @Autowired
-    private ServletContext servletContext;
-    private static final Logger logger = Logger.getLogger(String.valueOf(LoginController.class));
+	private DatabaseService dbservice;
 
-    // Fetch the user-information from the model
-    @RequestMapping(method = RequestMethod.POST)
-    public String login(
-            HttpServletRequest req, HttpServletResponse resp,
-            ModelMap model, final RedirectAttributes redirectAttrs) throws XQException, IOException {
+	@Autowired
+	private ServletContext servletContext;
+	private static final Logger logger = Logger.getLogger(String
+			.valueOf(LoginController.class));
 
-        logger.info("Successfully logged in");
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+	// Fetch the user-information from the model
+	@RequestMapping(method = RequestMethod.POST)
+	public String login(HttpServletRequest req, HttpServletResponse resp,
+			ModelMap model, final RedirectAttributes redirectAttrs)
+			throws XQException, IOException {
 
-        // Hash the password, for dem safety-reasons
-        String passwordHash = encryptPassword(password);
-        // This user-object can be used for further actions
-        // TODO: Return the user's uuid for further actions?
-        User tmp_user = new User(username, passwordHash);
+		logger.info("Successfully logged in");
+		String username = req.getParameter("username");
+		String password = req.getParameter("password");
 
-        logger.info("username: " + username + ", password: " + passwordHash);
+		// Hash the password, for dem safety-reasons
+		String passwordHash = encryptPassword(password);
+		// This user-object can be used for further actions
+		// TODO: Return the user's uuid for further actions?
+		User tmp_user = new User(username, passwordHash);
 
-        User dbUser = null;
-        try {
-        	dbUser = validateUserInXMLDB(tmp_user);
-        } catch (BaseXException e) {
-            e.printStackTrace();
-        }
+		logger.info("username: " + username + ", password: " + passwordHash);
 
-        // Check if the user is in the XML file
-        if (dbUser != null){
-        	req.getSession().setAttribute("user", dbUser);
-            return "redirect:HotOrNot";
-        }else{
-            // Else return an errorpage
-            model.addAttribute("username", username);
-            model.addAttribute("password", passwordHash);
-            return "errorpage";
-        }
-    }
+		User dbUser = null;
+		try {
+			dbUser = validateUserInXMLDB(tmp_user);
+			
+			if(dbUser != null){				
+				dbUser = isPasswordValid(tmp_user, dbUser);
+			}else{
+				dbUser = registerUser(tmp_user);
+			}
+		} catch (BaseXException e) {
+			e.printStackTrace();
+		}
 
-    @RequestMapping(method = RequestMethod.GET)
-    public static String showForm(){
-        return "login";
-    }
+		// Check if the user is in the XML file
+		if (dbUser != null) {
+			req.getSession().setAttribute("user", dbUser);
+			return "redirect:HotOrNot";
+		} else {
+			// Else return an errorpage
+			model.addAttribute("username", username);
+			model.addAttribute("password", passwordHash);
+			return "errorpage";
+		}
+	}
 
-    protected static String encryptPassword(String password)
-    {
-        String sha1 = "";
-        try
-        {
-            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-            crypt.reset();
-            crypt.update(password.getBytes("UTF-8"));
-            sha1 = byteToHex(crypt.digest());
-        }
-        catch(NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-        return sha1;
-    }
+	private User registerUser(User tmp_user) {
+		try {
+			Integer newID = dbservice.getLastUserID();
+			tmp_user.setId(newID + 1);
+			this.dbservice.insertNewUserData(tmp_user);
+			return tmp_user;
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+		return tmp_user;
+		
+	}
 
-    private static String byteToHex(final byte[] hash)
-    {
-        Formatter formatter = new Formatter();
-        for (byte b : hash)
-        {
-            formatter.format("%02x", b);
-        }
-        String result = formatter.toString();
-        formatter.close();
-        return result;
-    }
+	@RequestMapping(method = RequestMethod.GET)
+	public static String showForm() {
+		return "login";
+	}
 
-    private User validateUserInXMLDB(User user) throws XQException, IOException {
+	protected static String encryptPassword(String password) {
+		String sha1 = "";
+		try {
+			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+			crypt.reset();
+			crypt.update(password.getBytes("UTF-8"));
+			sha1 = byteToHex(crypt.digest());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return sha1;
+	}
 
-        // Get the dbservice instance
-        // DatabaseService dbservice = new DatabaseService();
-//        DatabaseService dbservice = DatabaseService.getInstance();
-        String tmpPass = user.getPassword();
-        User dbUser = null;
-        try{
-        	dbUser = dbservice.getUserByName(user.getUsername());
-        }catch (NullPointerException e){
-            logger.info(e.getMessage());
-        }
-            logger.info(user.getPassword() + " " + tmpPass);
+	private static String byteToHex(final byte[] hash) {
+		Formatter formatter = new Formatter();
+		for (byte b : hash) {
+			formatter.format("%02x", b);
+		}
+		String result = formatter.toString();
+		formatter.close();
+		return result;
+	}
 
-        try {
-            // Check if the password in the XML equals the one in the passed form
-            if (dbUser != null && user.getPassword().equals(dbUser.getPassword())){
-                return dbUser;
-            }
-        }catch (Exception e){
-            logger.info(e.getMessage());
-        }
-        return null;
-    }
+	private User validateUserInXMLDB(User user) throws XQException, IOException {
+
+		// Get the dbservice instance
+		// DatabaseService dbservice = new DatabaseService();
+		// DatabaseService dbservice = DatabaseService.getInstance();
+		String tmpPass = user.getPassword();
+		try {
+			return dbservice.getUserByName(user.getUsername());
+		} catch (NullPointerException e) {
+			logger.info(e.getMessage());
+		}
+		logger.info(user.getPassword() + " " + tmpPass);
+		return user;
+
+	}
+
+	private User isPasswordValid(User user, User dbUser) {
+		try {
+			// Check if the password in the XML equals the one in the passed
+			// form
+			if (dbUser != null
+					&& user.getPassword().equals(dbUser.getPassword())) {
+				return dbUser;
+			}
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+		return null;
+	}
 }

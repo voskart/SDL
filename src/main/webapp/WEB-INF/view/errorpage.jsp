@@ -15,6 +15,6 @@
     <title>Error</title>
 </head>
 <body>
-A user with the username <c:out value="${username}"/> and hash <c:out value="${password}"/> is not known! Wrong password or not registered?
+A user with the username <c:out value="${username}"/> and hash <c:out value="${password}"/> is not known! Wrong password?!
 </body>
 </html>
