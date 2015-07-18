@@ -25,7 +25,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="inverseNavbar1">
       <ul class="nav navbar-nav">
-        <li ><a href="/SDL/login">Login</a></li>
+        <li ><a href="/sdl/login">Login</a></li>
         <li class="active"><a href="#">Registration<span class="sr-only">(current)</span></a></li>
       </ul>
     </div>

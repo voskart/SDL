@@ -33,7 +33,7 @@
     <div class="collapse navbar-collapse" id="inverseNavbar1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Login<span class="sr-only">(current)</span></a></li>
-        <li><a href="/SDL/registration">Registration</a></li>
+        <li><a href="/sdl/registration">Registration</a></li>
       </ul>
     </div>
     <!-- /.navbar-collapse -->

@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("jquery.min.js") %>'></script>
-<script type='text/javascript' src='<%= org.webjars.AssetLocator.getWebJarPath("js/bootstrap.min.js") %>'></script>
+<link href="/sdl/rescources/js/jquery-2.1.1.js" rel="stylesheet" type="text/css">
+<link href="/sdl/rescources/js/bootstrap.js" rel="stylesheet" type="text/css">
+<link href="/sdl/rescources/css/sdlstyle.css" rel="stylesheet" type="text/css">
 <html>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -10,7 +11,6 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-<link href="/SDL/rescources/css/sdlstyle.css" rel="stylesheet" type="text/css">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,7 +29,7 @@
     <div class="collapse navbar-collapse" id="inverseNavbar1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">"Rocks or Not"<span class="sr-only">(current)</span></a></li>
-        <li ><a href="/SDL/Table">Table</a></li>
+        <li ><a href="/sdl/Table">Table</a></li>
       </ul>
     </div>
     <!-- /.navbar-collapse -->
